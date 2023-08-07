@@ -11,27 +11,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token }) {
-      token.userRole = "admin";
-      return token;
+    async signIn({ account, profile }) {
+      console.log("profile:", profile);
+      return true;
     },
-    // async signIn({ user, account, profile, email, credentials }) {
-    //   console.log("user:", user);
-    //   console.log("account:", account);
-    //   console.log("profile:", profile);
-    //   console.log("email:", email);
-    //   console.log("credentials:", credentials);
-    //   return true;
-    // },
   },
   adapter: MongoDBAdapter(clientPromise, {
-    databaseName: "echo-charlie-alpha",
+    databaseName: "omega-fox",
   }) as any,
-  // secret: process.env.NEXTAUTH_SECRET,
-  //   session info = https://next-auth.js.org/configuration/options#session
-  session: {
-    strategy: "jwt",
-  },
 };
 
 const handler = NextAuth(authOptions);
