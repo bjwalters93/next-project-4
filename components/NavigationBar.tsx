@@ -4,24 +4,11 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function NavigationBar() {
-  // const { data: session, status } = useSession();
-  const session = useSession();
-  console.log("session:", session);
+  const { data: session, status } = useSession();
   return (
     <nav>
-      {!session.data && (
-        <Link
-          href="/api/auth/signin"
-          // onClick={() => signIn("google")}
-        >
-          Sign In
-        </Link>
-      )}
-      {session.data?.user && (
-        <Link href="/api/auth/signout" onClick={() => signOut()}>
-          Sign Out
-        </Link>
-      )}
+      {!session && <Link href="/api/auth/signin">Sign In</Link>}
+      {session?.user && <Link href="/api/auth/signout">Sign Out</Link>}
     </nav>
   );
 }

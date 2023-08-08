@@ -1,22 +1,26 @@
-"use client";
-
-import { getProviders, signIn } from "next-auth/react";
-
+import { getProviders } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
-import Link from "next/link";
+import SignInPrompt from "@/components/SignInPrompt";
+import { redirect } from "next/navigation";
 
-export default function SignIn() {
-  const providers = getProviders();
-  //   console.log(providers);
+async function getData() {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect("/");
+  }
+
+  const providers = await getProviders();
+
+  return { providers: providers ?? [] };
+}
+
+export default async function SignIn() {
+  const { providers } = await getData();
+  console.log(providers);
   return (
-    <>
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <button onClick={() => signIn(provider.id)}>
-            Sign in with {provider.name}
-          </button>
-        </div>
-      ))}
-    </>
+    <div>
+      <SignInPrompt providers={providers} />
+    </div>
   );
 }
