@@ -1,9 +1,21 @@
-// import Image from "next/image";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import SignInLanding from "@/components/SignInLanding";
 
-export default function Home() {
+async function getSessionStatus() {
+  const session = await getServerSession(authOptions);
+  return session;
+}
+
+export default async function Home() {
+  const session = await getSessionStatus();
+  if (session) {
+    redirect("/user");
+  }
   return (
     <div>
-      <h2>Home Page</h2>
+      <SignInLanding />
     </div>
   );
 }
