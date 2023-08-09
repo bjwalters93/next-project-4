@@ -19,6 +19,9 @@ export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise, {
     databaseName: "omega-fox",
   }) as any,
+  session: {
+    strategy: "jwt",
+  },
 };
 
 const handler = NextAuth(authOptions);
