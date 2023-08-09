@@ -14,7 +14,7 @@ export default async function Home() {
     redirect("/user");
   }
   return (
-    <div>
+    <div className="">
       <SignInLanding />
     </div>
   );
