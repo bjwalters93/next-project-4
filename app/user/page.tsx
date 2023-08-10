@@ -1,17 +1,36 @@
-"use client";
+import UserSignOut from "@/components/UserSignOut";
+import FormTest from "@/components/FormTest";
 
-import { signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
+async function getData() {
+  const res = await fetch("http://localhost:3000/api/getDataTest");
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
 
-export default function UserRootPage() {
-  const { data: session, status } = useSession();
+  return res.json();
+}
+
+export default async function UserRootPage() {
+  const data = await getData();
+  console.log("data:", data);
   return (
     <div>
       <h1>User Root Page</h1>
-      <p>Signed in as {session?.user?.email}</p>
-      <button onClick={() => signOut({ callbackUrl: "http://localhost:3000" })}>
-        Sign out
-      </button>
+      <UserSignOut />
+      <FormTest />
+      <ul>
+        <li>{data.person.firstName}</li>
+        <li>{data.person.lastName}</li>
+        <li>{data.person.age}</li>
+        <li>{data.person.birthday}</li>
+        <li>{data.person.gender}</li>
+        <li>{data.person.height}</li>
+        <li>{data.person.weight}</li>
+        <li>{data.person.hobbies}</li>
+      </ul>
     </div>
   );
 }

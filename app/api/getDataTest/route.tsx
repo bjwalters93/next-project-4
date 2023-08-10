@@ -12,5 +12,6 @@ export async function GET() {
     return NextResponse.json({ person });
   } catch (e) {
     console.error(e);
+    return NextResponse.json(e);
   }
 }

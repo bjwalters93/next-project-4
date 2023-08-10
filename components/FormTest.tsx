@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { FormEvent } from "react";
 
@@ -30,21 +32,55 @@ export default function FormTest() {
     alert(`Is this your full name: ${result.data}`);
   };
   return (
-    <div className="">
-      <h1 className="">
-        Form <Link href="/">with</Link> JavaScript.
-      </h1>
-
-      <p className="">
-        Get started by looking at <code className="">pages/js-form.js</code>
-      </p>
+    <div className="border mb-10">
+      <h1 className="font-semibold mb-[10px] text-2xl">Form</h1>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="first">First Name</label>
-        <input type="text" id="first" name="first" required />
-        <label htmlFor="last">Last Name</label>
-        <input type="text" id="last" name="last" required />
-        <button type="submit">Submit</button>
+        <label
+          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          htmlFor="first"
+        >
+          First Name
+        </label>
+        <input
+          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          type="text"
+          id="first"
+          name="first"
+          required
+        />
+        <label
+          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          htmlFor="last"
+        >
+          Last Name
+        </label>
+        <input
+          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          type="text"
+          id="last"
+          name="last"
+          required
+        />
+        <label
+          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          htmlFor="last"
+        >
+          Email
+        </label>
+        <input
+          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          type="text"
+          id="last"
+          name="last"
+          required
+        />
+        <button
+          className="shadow bg-indigo-700 hover:bg-indigo-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+          type="submit"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
