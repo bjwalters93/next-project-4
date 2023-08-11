@@ -8,13 +8,20 @@ interface Person {
   firstName: string;
   lastName: string;
   email: string;
+  userId: string;
+}
+
+interface ServerSession {
+  user: Person;
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  console.log("session:", session);
-  const res = await request.json();
+  console.log();
   try {
+    const res = await request.json();
+    const session = (await getServerSession(authOptions)) as ServerSession;
+    console.log("session:", session);
+
     const client = await clientPromise;
     const db = client.db("sample_people");
     const personData = db.collection<Person>("people");
@@ -22,6 +29,7 @@ export async function POST(request: Request) {
       firstName: res.first,
       lastName: res.last,
       email: res.email,
+      userId: session.user.userId,
     });
     console.log(`A document was inserted with the _id: ${result.insertedId}`);
     return NextResponse.json({ res });
