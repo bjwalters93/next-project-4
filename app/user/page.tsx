@@ -15,7 +15,6 @@ async function getData() {
 
 export default async function UserRootPage() {
   const data = await getData();
-  console.log("data:", data);
   return (
     <div>
       <h1>User Root Page</h1>
