@@ -1,0 +1,50 @@
+# - The MongoDBAdapter does work, what it does is it stores the user info in the mongo db database. You can set options such as the name of the database or collection.
+
+# - MongoDb data models - explains the next auth adapter data structure. i.e user, account session objects.
+    https://authjs.dev/reference/adapters
+
+# - These are the docs for interacting with a MongoDB database when using the node driver(what your currently using) -- this is much different
+    from the official docs, which use other drivers/languages. You need to use these as a referance. The main docs explains this.
+    https://www.mongodb.com/docs/drivers/node/current/
+
+# - Connecting to the MongoDB database
+    * Connecting to MongoDB with Next.js is slightly different then the example provided in the official docs(linked above).
+    * Official docs: https://www.mongodb.com/docs/drivers/node/current/usage-examples/
+      here it explains using ES Modules(import) vs CommonJS Module(require).
+    * Here is another important link that explains how to connect MongoDB with Next.js
+      https://www.mongodb.com/developer/languages/javascript/nextjs-with-mongodb/#getting-started-with-mongodb
+      It also explains how to fetch data. This documentation is again, slightly different from the official docs.
+      -------------------------------------------------------------------------------------
+        import clientPromise from "../../lib/mongodb";
+
+        export default async (req, res) => {
+        try {
+            const client = await clientPromise;
+            const db = client.db("sample_mflix");
+            ....
+        VS.
+        import { MongoClient } from "mongodb";
+
+        const uri = "<connection string uri>";
+        const client = new MongoClient(uri);
+
+        async function run() {
+        try {
+            const database = client.db("sample_mflix");
+            const movies = database.collection("movies");
+            ...
+      -------------------------------------------------------------------------------------
+# - Extracting userId. If you attempt to extract user id from the session callback you will get a type error, the documentation isn't straight forward in it's explanation.
+    If you dig deeper you will find this link https://next-auth.js.org/getting-started/typescript#module-augmentation which explains module augmentation. You have to go
+    in and update the types. By default you can only access name, email, and image.
+
+# - Apparently you cannot use Middleware with "database" strategy. This means you won't be able to protect routes unless you use
+       JWT sessions.
+       https://next-auth.js.org/configuration/options#session
+        // Choose how you want to save the user session.
+        // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.
+        // If you use an `adapter` however, we default it to `"database"` instead.
+        // You can still force a JWT session by explicitly defining `"jwt"`.
+        // When using `"database"`, the session cookie will only contain a `sessionToken` value,
+        // which is used to look up the session in the database.
+
