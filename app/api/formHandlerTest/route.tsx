@@ -1,6 +1,8 @@
 import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 // import { ObjectId } from "mongodb";
+import { authOptions } from "../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
 
 interface Person {
   firstName: string;
@@ -9,6 +11,8 @@ interface Person {
 }
 
 export async function POST(request: Request) {
+  const session = await getServerSession(authOptions);
+  console.log("session:", session);
   const res = await request.json();
   try {
     const client = await clientPromise;

@@ -18,9 +18,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
-      console.log("profile:", profile);
-      return true;
+    async session({ session, token }) {
+      console.log("token:", token);
+      session.user.userId = token.sub;
+      return session;
     },
   },
   adapter: MongoDBAdapter(clientPromise, {
