@@ -1,35 +1,32 @@
 "use client";
 
-import Link from "next/link";
+// import Link from "next/link";
 import { FormEvent } from "react";
 
 export default function FormTest() {
-  // Handle the submit event on form submit.
   const handleSubmit = async (event: FormEvent) => {
-    // Stop the form from submitting and refreshing the page.
     event.preventDefault();
-    // Cast the event target to an html form
     const form = event.target as HTMLFormElement;
-    // Get data from the form.
     const data = {
       first: form.first.value as string,
       last: form.last.value as string,
+      email: form.email.value as string,
     };
-    // Send the form data to our API and get a response.
-    const response = await fetch("/api/form", {
-      // Body of the request is the JSON data we created above.
+    const response = await fetch("http://localhost:3000/api/formHandlerTest", {
       body: JSON.stringify(data),
-      // Tell the server we're sending JSON.
       headers: {
         "Content-Type": "application/json",
       },
-      // The method is POST because we are sending data.
       method: "POST",
     });
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
+    // interesting reminder - JSON is a string that represents a javascript object. The .json() method
+    // parses the string and returns an actual javascript object. This is why in the fetch request body(above)
+    // you need to STRINGIFY the object(converts object to JSON).
     const result = await response.json();
-    alert(`Is this your full name: ${result.data}`);
+    console.log("result:", result);
+    alert(
+      `Is this the correct entry?: ${result.res.first} ${result.res.last} ${result.res.email}`
+    );
   };
   return (
     <div className="border mb-10">
@@ -64,15 +61,15 @@ export default function FormTest() {
         />
         <label
           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          htmlFor="last"
+          htmlFor="email"
         >
           Email
         </label>
         <input
           className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          type="text"
-          id="last"
-          name="last"
+          type="email"
+          id="email"
+          name="email"
           required
         />
         <button
