@@ -1,8 +1,12 @@
 import UserSignOut from "@/components/UserSignOut";
 import FormTest from "@/components/FormTest";
+import { headers } from "next/headers";
 
-async function getData() {
-  const res = await fetch("http://localhost:3000/api/getDataTest");
+async function getUserData() {
+  const res = await fetch("http://localhost:3000/api/getUserData", {
+    method: "GET",
+    headers: headers(),
+  });
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
   if (!res.ok) {
@@ -14,21 +18,17 @@ async function getData() {
 }
 
 export default async function UserRootPage() {
-  const data = await getData();
+  const userData = await getUserData();
+  console.log("userData:", userData);
   return (
     <div>
       <h1>User Root Page</h1>
       <UserSignOut />
       <FormTest />
       <ul>
-        <li>{data.person.firstName}</li>
-        <li>{data.person.lastName}</li>
-        <li>{data.person.age}</li>
-        <li>{data.person.birthday}</li>
-        <li>{data.person.gender}</li>
-        <li>{data.person.height}</li>
-        <li>{data.person.weight}</li>
-        <li>{data.person.hobbies}</li>
+        <li>{userData.user.firstName}</li>
+        <li>{userData.user.lastName}</li>
+        <li>{userData.user.email}</li>
       </ul>
     </div>
   );

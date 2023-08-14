@@ -19,18 +19,25 @@ export async function POST(request: Request) {
   try {
     const res = await request.json();
     const session = (await getServerSession(authOptions)) as ServerSession;
-    console.log("session:", session);
 
     const client = await clientPromise;
     const db = client.db("sample_people");
     const personData = db.collection<Person>("people");
-    const result = await personData.insertOne({
-      firstName: res.first,
-      lastName: res.last,
-      email: res.email,
-      userId: session.user.userId,
-    });
-    console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    const result = await personData.updateOne(
+      { userId: session.user.userId },
+      {
+        $set: {
+          firstName: res.first,
+          lastName: res.last,
+          email: res.email,
+          userId: session.user.userId,
+        },
+      },
+      { upsert: true }
+    );
+    console.log(
+      `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+    );
     return NextResponse.json({ res });
   } catch (e) {
     console.log(e);
