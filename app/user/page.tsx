@@ -13,7 +13,6 @@ async function getUserData() {
     // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch data");
   }
-
   return res.json();
 }
 
@@ -26,9 +25,9 @@ export default async function UserRootPage() {
       <UserSignOut />
       <FormTest />
       <ul>
-        <li>{userData.user.firstName}</li>
-        <li>{userData.user.lastName}</li>
-        <li>{userData.user.email}</li>
+        <li>{userData.user ? userData.user.firstName : "null"}</li>
+        <li>{userData.user ? userData.user.lastName : "null"}</li>
+        <li>{userData.user ? userData.user.email : "null"}</li>
       </ul>
     </div>
   );

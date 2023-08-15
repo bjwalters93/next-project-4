@@ -2,8 +2,10 @@
 
 // import Link from "next/link";
 import { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function FormTest() {
+  const router = useRouter();
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
@@ -12,7 +14,7 @@ export default function FormTest() {
       last: form.last.value as string,
       email: form.email.value as string,
     };
-    const response = await fetch("http://localhost:3000/api/formHandlerTest", {
+    const response = await fetch("http://localhost:3000/api/postUserForm", {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
@@ -23,6 +25,7 @@ export default function FormTest() {
     // parses the string and returns an actual javascript object. This is why in the fetch request body(above)
     // you need to STRINGIFY the object(converts object to JSON).
     const result = await response.json();
+    router.refresh();
     console.log("result:", result);
     alert(
       `Is this the correct entry?: ${result.res.first} ${result.res.last} ${result.res.email}`

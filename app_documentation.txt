@@ -48,3 +48,19 @@
         // When using `"database"`, the session cookie will only contain a `sessionToken` value,
         // which is used to look up the session in the database.
 
+# - There is NO need to use Route Handlers inside of server components! (This is what you are doing now.) -- Fix.
+    Route Handlers have specific use cases. Common use cases for Route Handlers are when you need to hide API keys,
+    or secret URLS from the client. IF you are fetching/posting data in a server component they are already hidden from the client side.
+    Furthermore, if you are fetching/posting data on the client side and their are no secrets/keys that need to be protected
+    there is no point in using route handlers on the client side either. However, if you need to fetch/post data on the client side
+    and there are secrets/keys that need to be hidden/protected this is when you would use a Route Handler. I.e a form (storing the
+    data could require the use of sensitive info such as a userId, which is what you are doing.)
+
+# - Another note on ROUTE HANDLERS, in the fetch request you can add query/searchParams and then access them in the route handler.
+    The folder structure DOES NOT include the search params. It remains app/api/getData/route.ts
+    example --- await fetch("/api/getData?name=Brian&lastName=Walters") ---> async Function GET(req) {
+        const { searchParams } = new URL(request.url)
+        const name = searchParams.get('name')
+        const lastName = searchParams.get('lastName')
+    }
+
