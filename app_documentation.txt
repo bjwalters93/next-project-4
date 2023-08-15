@@ -64,3 +64,34 @@
         const lastName = searchParams.get('lastName')
     }
 
+# - Static vs Dynamic Rendering(App Router) - Principles are similar when using Pages Router but also different. Here's the rundown.
+    * explained here https://nextjs.org/docs/app/building-your-application/rendering/static-and-dynamic
+    Static Routes are DEFAULT and rendered at build time. Notice DEFAULT. A route will remain STATIC unless you somehow opt out of
+    data caching. This can be done in a variety of ways.
+        https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating#opting-out-of-data-caching
+        fetch requests are not cached if:
+            The cache: 'no-store' is added to fetch requests.
+            The revalidate: 0 option is added to individual fetch requests.
+            The fetch request is inside a Router Handler that uses the POST method.
+            The fetch request comes after the usage of headers or cookies.
+            The const dynamic = 'force-dynamic' route segment option is used.
+            The fetchCache route segment option is configured to skip cache by default.
+            The fetch request uses Authorization or Cookie headers and there's an uncached request above it in the component tree.
+        !*During rendering, if a dynamic function or uncached data request is discovered, Next.js will switch to dynamically rendering the whole route.
+
+    For better performance for users it's best to use static rendering if possible. Static rendering allows data to be stored on CDNs and so the user does
+    not have to access the origin server. Explained here
+    *https://nextjs.org/learn/foundations/how-nextjs-works/cdns-and-edge
+
+# - Client-Side Rendering vs. Pre-Rendering
+    *https://nextjs.org/learn/foundations/how-nextjs-works/rendering
+    Serverside Rendering(SSR) and Static Site Genaration(SSG) are both forms of pre rendering.
+
+    Server-Side Rendering and Static Site Generation are also referred to as Pre-Rendering because the fetching of external data and transformation of
+    React components into HTML happens before the result is sent to the client.
+
+    In a standard React application, the browser receives an empty HTML shell from the server along with the JavaScript instructions to construct the
+    UI. This is called client-side rendering because the initial rendering work happens on the user's device.
+
+    In contrast, Next.js pre-renders every page by default. Pre-rendering means the HTML is generated in advance, on a server, instead of having it all
+    done by JavaScript on the user's device.
