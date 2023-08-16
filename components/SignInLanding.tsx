@@ -14,15 +14,7 @@ export default function SignInLanding() {
           signIn("google");
         }}
       >
-        <Image
-          className="mr-2"
-          src={googleLogo}
-          alt="Google Logo"
-          width={30}
-          // height={500} automatically provided
-          // blurDataURL="data:..." automatically provided
-          // placeholder="blur" // Optional blur-up while loading
-        />
+        <Image className="mr-2" src={googleLogo} alt="Google Logo" width={30} />
         Continue with Google
       </button>
     </div>

@@ -1,10 +1,9 @@
 import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
-// import { ObjectId } from "mongodb";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 
-interface Person {
+interface User {
   firstName: string;
   lastName: string;
   email: string;
@@ -12,7 +11,7 @@ interface Person {
 }
 
 interface ServerSession {
-  user: Person;
+  user: User;
 }
 
 export async function POST(request: Request) {
@@ -22,7 +21,7 @@ export async function POST(request: Request) {
 
     const client = await clientPromise;
     const db = client.db("sample_people");
-    const personData = db.collection<Person>("people");
+    const personData = db.collection<User>("people");
     const result = await personData.updateOne(
       { userId: session.user.userId },
       {
