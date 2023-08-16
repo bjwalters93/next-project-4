@@ -95,3 +95,11 @@
 
     In contrast, Next.js pre-renders every page by default. Pre-rendering means the HTML is generated in advance, on a server, instead of having it all
     done by JavaScript on the user's device.
+
+# - Sequential Data Fetching vs Parallel Data Fetching
+    *https://nextjs.org/docs/app/building-your-application/data-fetching/patterns
+    Important data fetching principles to keep in mind to avoid BLOCKING. Blocking happens when data waterfalls are created. (where some data is dependening
+    on other data, example data from one get request is required for another get request(sequential data fetching)). Sometimes this behavior is desired or even
+    nessecary. Other times it delays load times and diminishes user experience. If possible you should fetch data in parallel, you can use streaming/suspense
+    techniques to load components as the data becomes available, if a component is still loading you can display a loader of some kind to notify the user. examples
+    of fetching data in Parallel are provided in the link above in the offical next.js docs.

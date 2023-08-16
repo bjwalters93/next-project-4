@@ -1,19 +1,37 @@
+import clientPromise from "../../lib/mongodb";
 import UserSignOut from "@/components/UserSignOut";
 import FormTest from "@/components/FormTest";
-import { headers } from "next/headers";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
-async function getUserData() {
-  const res = await fetch("http://localhost:3000/api/getUserData", {
-    method: "GET",
-    headers: headers(),
-  });
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  userId: string;
+}
+
+interface ServerSession {
+  user: User;
+}
+
+async function getUserData(): Promise<User | null> {
+  try {
+    const session = (await getServerSession(authOptions)) as ServerSession;
+    console.log("session:", session);
+    const client = await clientPromise;
+    const db = client.db("sample_people");
+    const user = await db.collection("people").findOne<User>(
+      {
+        userId: session.user.userId,
+      },
+      { projection: { _id: 0 } }
+    );
+    return user;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Unable to fetch data!");
   }
-  return res.json();
 }
 
 export default async function UserRootPage() {
@@ -25,9 +43,9 @@ export default async function UserRootPage() {
       <UserSignOut />
       <FormTest />
       <ul>
-        <li>{userData.user ? userData.user.firstName : "null"}</li>
-        <li>{userData.user ? userData.user.lastName : "null"}</li>
-        <li>{userData.user ? userData.user.email : "null"}</li>
+        <li>{userData?.firstName}</li>
+        <li>{userData?.lastName}</li>
+        <li>{userData?.email}</li>
       </ul>
     </div>
   );
