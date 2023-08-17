@@ -1,7 +1,6 @@
 import clientPromise from "../../lib/mongodb";
 import FormTest from "@/components/FormTest";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { getSessionStatus } from "@/utils/getSessionStatus";
 
 interface User {
   firstName: string;
@@ -10,13 +9,9 @@ interface User {
   userId: string;
 }
 
-interface ServerSession {
-  user: User;
-}
-
 async function getUserData(): Promise<User | null> {
   try {
-    const session = (await getServerSession(authOptions)) as ServerSession;
+    const session = await getSessionStatus();
     const client = await clientPromise;
     const db = client.db("sample_people");
     const user = await db.collection("people").findOne<User>(
@@ -34,7 +29,6 @@ async function getUserData(): Promise<User | null> {
 
 export default async function UserRootPage() {
   const userData = await getUserData();
-  console.log("userData:", userData);
   return (
     <div>
       <FormTest />

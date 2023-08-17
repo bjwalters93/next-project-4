@@ -1,7 +1,6 @@
 import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
-import { getServerSession } from "next-auth/next";
+import { getSessionStatus } from "@/utils/getSessionStatus";
 
 interface User {
   firstName: string;
@@ -10,14 +9,10 @@ interface User {
   userId: string;
 }
 
-interface ServerSession {
-  user: User;
-}
-
 export async function POST(request: Request) {
   try {
     const res = await request.json();
-    const session = (await getServerSession(authOptions)) as ServerSession;
+    const session = await getSessionStatus();
 
     const client = await clientPromise;
     const db = client.db("sample_people");
