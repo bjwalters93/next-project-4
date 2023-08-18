@@ -11,6 +11,7 @@ type User = {
 };
 
 async function getUserData(): Promise<User | null> {
+  let x;
   try {
     const session = (await getSessionStatus()) as Session;
     const client = await clientPromise;
@@ -21,6 +22,16 @@ async function getUserData(): Promise<User | null> {
       },
       { projection: { _id: 0 } }
     );
+    // Code for delaying data - to show loading.tsx
+    // --------------------------------------------------------------
+    let myPromise = new Promise(function (myResolve) {
+      setTimeout(function () {
+        myResolve("I love You !!");
+      }, 10000);
+    });
+    let myPromiseResolved = await myPromise;
+    console.log(myPromiseResolved);
+    // --------------------------------------------------------------
     return user;
   } catch (e) {
     console.error(e);
