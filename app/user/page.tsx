@@ -1,17 +1,18 @@
 import clientPromise from "../../lib/mongodb";
 import FormTest from "@/components/FormTest";
 import { getSessionStatus } from "@/utils/getSessionStatus";
+import { Session } from "next-auth";
 
-interface User {
+type User = {
   firstName: string;
   lastName: string;
   email: string;
   userId: string;
-}
+};
 
 async function getUserData(): Promise<User | null> {
   try {
-    const session = await getSessionStatus();
+    const session = (await getSessionStatus()) as Session;
     const client = await clientPromise;
     const db = client.db("sample_people");
     const user = await db.collection("people").findOne<User>(

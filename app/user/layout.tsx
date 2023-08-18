@@ -1,16 +1,17 @@
 import UserSignOut from "@/components/UserSignOut";
 import { getSessionStatus } from "@/utils/getSessionStatus";
+import { Session } from "next-auth";
 
 export default async function UserPageLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSessionStatus();
-  console.log("testing:", session);
+  const { user } = (await getSessionStatus()) as Session;
+  delete user.userId;
   return (
     <div>
-      <UserSignOut session={session} />
+      <UserSignOut user={user} />
       {children}
     </div>
   );

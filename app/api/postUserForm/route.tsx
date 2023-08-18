@@ -2,12 +2,12 @@ import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import { getSessionStatus } from "@/utils/getSessionStatus";
 
-interface User {
+type User = {
   firstName: string;
   lastName: string;
   email: string;
   userId: string;
-}
+};
 
 export async function POST(request: Request) {
   try {

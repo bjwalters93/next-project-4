@@ -1,16 +1,12 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../app/api/auth/[...nextauth]/route";
+import { Session } from "next-auth";
 
-type UserSessionInfo = {
-  user: {
-    name: string;
-    email: string;
-    image: string;
-    userId: string;
-  };
-};
-
-export async function getSessionStatus() {
-  const session = (await getServerSession(authOptions)) as UserSessionInfo;
-  return session;
+export async function getSessionStatus(): Promise<Session | null> {
+  const session = await getServerSession(authOptions);
+  if (session == null) {
+    return null;
+  } else {
+    return session;
+  }
 }

@@ -1,31 +1,29 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-// import { useSession } from "next-auth/react";
 import Image from "next/image";
 // import googleLogo from "../public/google-logo.png";
 
 type User = {
-  session: {
-    user: {
-      name: string;
-      email: string;
-      image: string;
-      userId: string;
-    };
+  user: {
+    name?: string;
+    email?: string;
+    image?: string;
   };
 };
 
-export default function UserSignOut({ session }: User) {
-  //   const { data: session } = useSession();
-  console.log("session:", session);
-  //   const url = session?.user.image as string;
+export default function UserSignOut({ user }: User) {
+  if (typeof user.image !== "string") {
+    throw new Error(
+      "Image src attribute is not equal to string --> user image display in UserSignOutComponent "
+    );
+  }
   return (
     <div className="bg-zinc-950 flex justify-between py-2 px-4">
       <div className="flex items-center">
         <Image
           //   src={session ? url : googleLogo}
-          src={session.user.image}
+          src={user.image}
           alt="Picture of the signed in user."
           width={40}
           height={40}
@@ -33,9 +31,7 @@ export default function UserSignOut({ session }: User) {
           placeholder="blur" // Optional blur-up while loading
           className="mr-1 rounded-full border border-white"
         />
-        <p className="text-white font-medium">
-          Signed in as {session?.user?.email}
-        </p>
+        <p className="text-white font-medium">Signed in as {user.email}</p>
       </div>
 
       <button
