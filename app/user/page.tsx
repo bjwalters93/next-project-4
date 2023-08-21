@@ -27,7 +27,7 @@ async function getUserData(): Promise<User | null> {
     let myPromise = new Promise(function (myResolve) {
       setTimeout(function () {
         myResolve("I love You !!");
-      }, 10000);
+      }, 3000);
     });
     let myPromiseResolved = await myPromise;
     console.log(myPromiseResolved);

@@ -12,19 +12,12 @@ type User = {
   };
 };
 
-export default async function UserSignOut({ user }: User) {
+export default function UserSignOut({ user }: User) {
   if (typeof user.image !== "string") {
     throw new Error(
       "Image src attribute is not equal to string --> user image display in UserSignOutComponent "
     );
   }
-  let myPromise = new Promise(function (myResolve) {
-    setTimeout(function () {
-      myResolve("I love You !!");
-    }, 10000);
-  });
-  let myPromiseResolved = await myPromise;
-  console.log(myPromiseResolved);
   return (
     <div className="bg-zinc-950 flex justify-between py-2 px-4">
       <div className="flex items-center">
