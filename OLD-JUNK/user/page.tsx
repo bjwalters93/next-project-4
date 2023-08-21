@@ -1,13 +1,5 @@
 import clientPromise from "../../lib/mongodb";
-import AddIncomeFormUI from "@/components/AddIncomeFormUI";
-import AddExpenseFormUI from "@/components/AddExpenseFormUI";
-import AddCategoryUI from "@/components/AddCategoryUI";
-import TotalBalanceDisplay from "@/components/TotalBalanceDisplay";
-import TotalExpenseDisplay from "@/components/TotalExpenseDisplay";
-import TransactionHistoryUI from "@/components/TransactionHistoryUI";
-import WeeklyPieUI from "@/components/WeeklyPieUI";
-import MonthlyPieUI from "@/components/MonthlyPieUI";
-import YearlyPieUI from "@/components/YearlyPieUI";
+import FormTest from "@/components/FormTest";
 import { getSessionStatus } from "@/utils/getSessionStatus";
 import { Session } from "next-auth";
 
@@ -51,21 +43,12 @@ export default async function UserRootPage() {
   const userData = await getUserData();
   return (
     <div>
-      <div>
-        <TotalBalanceDisplay />
-        <TotalExpenseDisplay />
-        <TransactionHistoryUI />
-      </div>
-      <div className="flex">
-        <WeeklyPieUI />
-        <MonthlyPieUI />
-        <YearlyPieUI />
-      </div>
-      <div className="flex">
-        <AddIncomeFormUI />
-        <AddExpenseFormUI />
-        <AddCategoryUI />
-      </div>
+      <FormTest />
+      <ul>
+        <li>{userData?.firstName}</li>
+        <li>{userData?.lastName}</li>
+        <li>{userData?.email}</li>
+      </ul>
     </div>
   );
 }
