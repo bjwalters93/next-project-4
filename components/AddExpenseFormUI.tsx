@@ -75,6 +75,19 @@ export default function AddExpenseFormUI() {
           name="date"
           required
         />
+        <label
+          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          htmlFor="notes"
+        >
+          Notes
+        </label>
+        <input
+          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          type="text"
+          id="notes"
+          name="notes"
+          required
+        />
         <button
           className="shadow bg-indigo-700 hover:bg-indigo-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
           type="submit"

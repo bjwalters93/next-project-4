@@ -64,7 +64,6 @@ export default async function UserRootPage() {
       <div className="flex">
         <AddIncomeFormUI />
         <AddExpenseFormUI />
-        <AddCategoryUI />
       </div>
     </div>
   );
