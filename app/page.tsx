@@ -8,12 +8,12 @@ export default async function Home() {
   if (session) {
     const client = await clientPromise;
     const db = client.db("user_data");
-    const user = await db.collection("add_income").findOne({
+    const user = await db.collection("user_transactions").findOne({
       userId: session.user.userId,
     });
     if (user === null) {
       console.log("User is new, created new document for the new user.");
-      const personData = db.collection("add_income");
+      const personData = db.collection("user_transactions");
       const result = await personData.insertOne({
         userId: session.user.userId,
         addIncome: [],
