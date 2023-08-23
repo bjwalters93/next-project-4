@@ -20,7 +20,7 @@ export default async function Home() {
         addExpense: [],
       });
     } else {
-      console.log("User already exists. No new document was created");
+      console.log("User already exists. No new document was created.");
     }
     redirect("/user");
   }
