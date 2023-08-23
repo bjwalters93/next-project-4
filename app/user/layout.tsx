@@ -1,7 +1,6 @@
 import UserSignOut from "@/components/UserSignOut";
 import { getSessionStatus } from "@/utils/getSessionStatus";
 import { Session } from "next-auth";
-import { Suspense } from "react";
 
 export default async function UserPageLayout({
   children,

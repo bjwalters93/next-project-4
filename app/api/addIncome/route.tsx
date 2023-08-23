@@ -1,16 +1,7 @@
 import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { getSessionStatus } from "@/utils/getSessionStatus";
-import { ObjectId } from "mongodb";
 import { v4 as uuidv4 } from "uuid";
-
-type AddIncome = {
-  userId: string;
-  source: string;
-  amount: string;
-  date: string;
-  notes: string;
-};
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +12,7 @@ export async function POST(request: Request) {
     }
     const client = await clientPromise;
     const db = client.db("user_data");
-    const personData = db.collection<AddIncome>("user_transactions");
+    const personData = db.collection("user_transactions");
     const result = await personData.updateOne(
       { userId: session.user.userId },
       {

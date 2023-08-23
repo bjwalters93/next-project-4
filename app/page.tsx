@@ -19,7 +19,6 @@ export default async function Home() {
         addIncome: [],
         addExpense: [],
       });
-      console.log("result:", result);
     } else {
       console.log("User already exists. No new document was created");
     }
