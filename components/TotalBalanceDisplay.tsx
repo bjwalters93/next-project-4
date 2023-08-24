@@ -7,28 +7,28 @@ import clientPromise from "@/lib/mongodb";
 //   },
 // });
 
-async function getUserData() {
-  try {
-    const client = await clientPromise;
-    const database = client.db("user_data");
-    const addIncomeTransactions = database.collection("user_transactions");
-    const query = {
-      addIncome: {
-        $gt: ISODate(),
-        $lt: ISODate(),
-      },
-    };
-    const cursor = addIncomeTransactions.find();
-    if ((await addIncomeTransactions.countDocuments(query)) === 0) {
-      console.warn("No documents found!");
-    }
-    for await (const doc of cursor) {
-      console.dir(doc);
-    }
-  } catch {
-    throw new Error("Unable to retrieve transactions for current week.");
-  }
-}
+// async function getUserData() {
+//   try {
+//     const client = await clientPromise;
+//     const database = client.db("user_data");
+//     const addIncomeTransactions = database.collection("user_transactions");
+//     const query = {
+//       addIncome: {
+//         $gt: ISODate(),
+//         $lt: ISODate(),
+//       },
+//     };
+//     const cursor = addIncomeTransactions.find();
+//     if ((await addIncomeTransactions.countDocuments(query)) === 0) {
+//       console.warn("No documents found!");
+//     }
+//     for await (const doc of cursor) {
+//       console.dir(doc);
+//     }
+//   } catch {
+//     throw new Error("Unable to retrieve transactions for current week.");
+//   }
+// }
 
 export default function TotalBalanceDisplay() {
   return (
