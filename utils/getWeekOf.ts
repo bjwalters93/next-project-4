@@ -1,7 +1,5 @@
-const currentDate = new Date();
-// const currentDate = new Date(2023, 7, 28);
-
-function startOfWeek(date: Date) {
+export default function getWeekRange() {
+  const date = new Date();
   const dayOfMonth = date.getDate();
   let weekday;
   switch (date.getDay()) {
@@ -29,13 +27,11 @@ function startOfWeek(date: Date) {
   const diff = dayOfMonth - weekday!;
   const range = <{ start: string; end: string }>{};
   range.start = new Date(date.setDate(diff)).toISOString().slice(0, 10);
-  range.end = new Date(currentDate.setDate(date.getDate() + 6))
+  range.end = new Date(date.setDate(date.getDate() + 6))
     .toISOString()
     .slice(0, 10);
   return { range };
 }
-
-console.log(startOfWeek(currentDate));
 
 // ---Referance below
 // https://www.w3resource.com/javascript-exercises/javascript-date-exercise-50.php
