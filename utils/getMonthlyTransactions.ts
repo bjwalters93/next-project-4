@@ -13,7 +13,7 @@ type Transaction = {
   transactionCode: string;
 };
 
-export default async function getWeeklyTransactions() {
+export default async function getMonthlyTransactions() {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -24,19 +24,23 @@ export default async function getWeeklyTransactions() {
     const client = await clientPromise;
     const db = client.db("user_data");
     const collection = db.collection("user_transactions");
+    // const month = new Date().getMonth().toISOString() + 1;
+    // console.log("month:", month);
+    // const transactions = await collection
+    //   .find<Transaction>({
+    //     userId: session.user.userId,
+    //     type: "income",
+    //     date: { $expr: { $eq: [{ $month: "$date" }, 1] } },
+    //   })
+    //   .toArray();
     const transactions = await collection
       .find<Transaction>({
-        userId: session.user.userId,
-        type: "income",
-        date: {
-          $gte: new Date(week.range.start),
-          $lte: new Date(week.range.end),
-        },
+        $expr: { $eq: [{ $month: "$date" }, 8] },
       })
       .toArray();
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getWeeklyEarnings()");
+    throw new Error("Error: Failed to fetch getMonthlyEarnings()");
   }
 }

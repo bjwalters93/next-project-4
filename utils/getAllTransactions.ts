@@ -28,7 +28,8 @@ export default async function getAllTransactions() {
       })
       .toArray();
     return transactions;
-  } catch {
+  } catch (e) {
+    console.log(e);
     throw new Error("Error: Failed to fetch getAllEarnings()");
   }
 }
