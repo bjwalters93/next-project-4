@@ -3,8 +3,6 @@ import { getSessionStatus } from "@/utils/getSessionStatus";
 import getWeekRange from "./getWeekOf";
 
 type Transaction = {
-  _id: string;
-  userId: string;
   type: string;
   source: string;
   amount: string;
@@ -32,6 +30,15 @@ export default async function getWeeklyTransactions() {
           $gte: new Date(week.range.start),
           $lte: new Date(week.range.end),
         },
+      })
+      .project({
+        type: 1,
+        source: 1,
+        amount: 1,
+        date: 1,
+        notes: 1,
+        transactionCode: 1,
+        _id: 0,
       })
       .toArray();
     return transactions;

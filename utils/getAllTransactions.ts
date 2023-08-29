@@ -2,8 +2,6 @@ import clientPromise from "@/lib/mongodb";
 import { getSessionStatus } from "@/utils/getSessionStatus";
 
 type Transaction = {
-  _id: string;
-  userId: string;
   type: string;
   source: string;
   amount: string;
@@ -25,6 +23,15 @@ export default async function getAllTransactions() {
       .find<Transaction>({
         userId: session.user.userId,
         type: "income",
+      })
+      .project({
+        type: 1,
+        source: 1,
+        amount: 1,
+        date: 1,
+        notes: 1,
+        transactionCode: 1,
+        _id: 0,
       })
       .toArray();
     return transactions;
