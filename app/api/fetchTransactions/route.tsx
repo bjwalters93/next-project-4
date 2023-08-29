@@ -6,14 +6,15 @@ import getYearlyTransactions from "@/utils/getYearlyTransactions";
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get("type");
-    if (type === "week") {
+    console.log("searchParams:", searchParams);
+    const option = searchParams.get("option");
+    if (option === "week") {
       const weeklyTransactions = await getWeeklyTransactions();
       return NextResponse.json(weeklyTransactions);
-    } else if (type === "month") {
+    } else if (option === "month") {
       const monthlyTransactions = await getMonthlyTransactions();
       return NextResponse.json(monthlyTransactions);
-    } else if (type === "year") {
+    } else if (option === "year") {
       const yearlyTransactions = await getYearlyTransactions();
       return NextResponse.json(yearlyTransactions);
     }

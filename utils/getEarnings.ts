@@ -1,6 +1,4 @@
 type Transactions = {
-  _id: string;
-  userId: string;
   type: string;
   source: string;
   amount: string;

@@ -11,27 +11,83 @@ import useCustomFetch from "@/custom_hooks/useCustomFetch";
 // radio buttons, this allows only one to be selected at a time. This isn't necessary when controlling the component with
 // state. If you control the checked attribute with state(like what's happening below), only one can be checked anyway.
 
+type Transaction = {
+  type: string;
+  source: string;
+  amount: string;
+  date: string;
+  notes: string;
+  transactionCode: string;
+};
+
 export default function TransactionHistoryUI() {
-  const [radio, setRadio] = useState("week");
+  const [radioOption, setRadioOption] = useState("week");
+  const [year, setYear] = useState<string | null>(null);
+  const [month, setMonth] = useState<string | null>(null);
 
-  const { transactions, isLoading, isError } = useCustomFetch(radio);
-  console.log("usedCustomFetch:", transactions);
-  console.log("isLoading:", isLoading);
-  console.log("isError:", isError);
+  const args = {
+    radio: radioOption,
+    year: year,
+    month: month,
+  };
 
-  //   Fix types below. Using any is unacceptable.
-  const transactionList: any = [];
+  const { transactions, isLoading, isError } = useCustomFetch(args);
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const data = {
+      month: form.month.value as string,
+      year: form.year.value as string,
+    };
+    setMonth(data.month);
+    setYear(data.year);
+  }
+
+  const transactionList: JSX.Element[] = [];
 
   if (transactions) {
-    transactions.forEach((el: any) => {
-      transactionList.push(<li>{el.date}</li>);
+    transactions.forEach((el: Transaction) => {
+      const formatDate = new Date(el.date).toDateString();
+      transactionList.push(
+        <li key={el.transactionCode}>
+          {el.transactionCode} | {formatDate} | {el.type} | {el.source} |
+          {el.amount} | {el.notes}
+        </li>
+      );
     });
   }
 
   console.log("transactionList:", transactionList);
 
   function onOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setRadio(event.target.value);
+    setRadioOption(event.target.value);
+  }
+
+  const monthsArr = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const optionsMonth: JSX.Element[] = monthsArr.map((el, i) => {
+    return <option value={i + 1}>{el}</option>;
+  });
+
+  const yearsOptions: JSX.Element[] = [];
+  const currentYear = new Date().getFullYear();
+  for (let i = 1; i < 101; i++) {
+    let year = currentYear - i;
+    yearsOptions.push(<option value={year}>{year}</option>);
   }
 
   return (
@@ -42,7 +98,7 @@ export default function TransactionHistoryUI() {
           type="radio"
           id="weekly"
           value="week"
-          checked={radio === "week"}
+          checked={radioOption === "week"}
           onChange={onOptionChange}
         />
         <label htmlFor="weekly">This week</label>
@@ -50,7 +106,7 @@ export default function TransactionHistoryUI() {
           type="radio"
           id="monthly"
           value="month"
-          checked={radio === "month"}
+          checked={radioOption === "month"}
           onChange={onOptionChange}
         />
         <label htmlFor="monthly">Monthly</label>
@@ -58,18 +114,31 @@ export default function TransactionHistoryUI() {
           type="radio"
           id="yearly"
           value="year"
-          checked={radio === "year"}
+          checked={radioOption === "year"}
           onChange={onOptionChange}
         />
         <label htmlFor="yearly">Yearly</label>
       </form>
-      {/* {isLoading ? (
-        <p>Loading transactions...</p>
-      ) : transactionList.length === 0 ? (
-        <p>No transactions to display.</p>
-      ) : (
-        <ul>{transactionList}</ul>
-      )} */}
+      {radioOption === "month" && (
+        <form /*onSubmit={handleSubmit}*/>
+          <label htmlFor="month">Choose a month:</label>
+          <select className="border border-black" id="month" name="month">
+            <option value={new Date().getMonth() + 1}>Current</option>
+            {optionsMonth}
+          </select>
+          <label htmlFor="year">Choose a year:</label>
+          <select className="border border-black" id="year" name="year">
+            <option value={new Date().getFullYear()}>Current</option>
+            {yearsOptions}
+          </select>
+          <button
+            className="border border-black bg-black text-lime-400"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      )}
       {isLoading && <p>Loading transactions...</p>}
       {transactionList.length === 0 && !isLoading && (
         <p>No transactions to display.</p>
@@ -78,6 +147,7 @@ export default function TransactionHistoryUI() {
     </div>
   );
 }
+
 //   const router = useRouter();
 //   const handleSubmit = async (event: FormEvent) => {
 //     event.preventDefault();
@@ -102,32 +172,6 @@ export default function TransactionHistoryUI() {
 //     );
 //   };
 
-{
-  /* <form onSubmit={handleSubmit}>
-        <label htmlFor="cars">Choose a month:</label>
-        <select className="border border-black" id="cars" name="cars">
-          <option value="currentMonth">Current</option>
-          <option value="Jan">January</option>
-          <option value="Feb">February</option>
-          <option value="March">March</option>
-          <option value="April">April</option>
-        </select>
-        <label htmlFor="cars">Choose a year:</label>
-        <select className="border border-black" id="cars" name="cars">
-          <option value="currentYear">Current</option>
-          <option value="Jan">January</option>
-          <option value="Feb">February</option>
-          <option value="March">March</option>
-          <option value="April">April</option>
-        </select>
-        <button
-          className="shadow bg-indigo-700 hover:bg-indigo-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-          type="submit"
-        >
-          Submit
-        </button>
-      </form> */
-}
 {
   /* <ul className="ml-10">
         <li className="bg-red-200 font-semibold">
