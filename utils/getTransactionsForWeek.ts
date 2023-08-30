@@ -27,8 +27,8 @@ export default async function getTransactionsForWeek(week: {
         userId: session.user.userId,
         type: "income",
         date: {
-          $gte: new Date(week.range.start),
-          $lte: new Date(week.range.end),
+          $gte: new Date(`${week.range.start} 00:00:00`),
+          $lte: new Date(`${week.range.end} 00:00:00`),
         },
       })
       .project({

@@ -22,6 +22,7 @@ export default function TransactionHistoryUI() {
   );
   const [month, setMonth] = useState<string | null>(null);
   const [year, setYear] = useState<string | null>(null);
+  console.log("week:", week);
   console.log("month:", month);
   console.log("year:", year);
 
@@ -33,6 +34,15 @@ export default function TransactionHistoryUI() {
   };
 
   const { transactions, isLoading, isError } = useCustomFetch(args);
+
+  function handleSubmitWeek(event: FormEvent) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const data = {
+      week: form.week.value as string,
+    };
+    setWeek(data.week);
+  }
 
   function handleSubmitMonth(event: FormEvent) {
     event.preventDefault();
@@ -51,13 +61,13 @@ export default function TransactionHistoryUI() {
     const data = {
       year: form.year.value as string,
     };
-    setMonth(null);
     setYear(data.year);
   }
 
   const transactionList: JSX.Element[] = [];
 
   if (transactions) {
+    console.log("transactions:", transactions);
     transactions.forEach((el: Transaction) => {
       const formatDate = new Date(el.date).toDateString();
       transactionList.push(
@@ -68,8 +78,6 @@ export default function TransactionHistoryUI() {
       );
     });
   }
-
-  console.log("transactionList:", transactionList);
 
   function onOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRadioOption(event.target.value);
@@ -93,7 +101,7 @@ export default function TransactionHistoryUI() {
     const valueString = JSON.stringify(el);
     return (
       <option key={i} value={valueString}>
-        {el.weekStart} to {el.weekEnd}
+        {el.range.start} to {el.range.end}
       </option>
     );
   });
@@ -162,7 +170,7 @@ export default function TransactionHistoryUI() {
         <label htmlFor="yearly">Yearly</label>
       </form>
       {radioOption === "week" && (
-        <form onSubmit={handleSubmitYear}>
+        <form onSubmit={handleSubmitWeek}>
           <label htmlFor="week">Choose a week:</label>
           <select className="border border-black" id="week" name="week">
             <option value={JSON.stringify(getWeekRange())}>Current</option>

@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       type: "income",
       source: res.source,
       amount: res.amount,
-      date: new Date(res.date),
+      date: new Date(`${res.date} 00:00:00`),
       notes: res.notes,
       transactionCode: uuidv4(),
     };

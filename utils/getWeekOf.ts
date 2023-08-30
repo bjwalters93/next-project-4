@@ -47,9 +47,8 @@ export function getPrev52Weeks() {
     const weekEndDate = new Date(endLoopDate.setDate(endLoopDate.getDate() - 7))
       .toISOString()
       .slice(0, 10);
-    weekArr.push({ weekStart: weekStartDate, weekEnd: weekEndDate });
+    weekArr.push({ range: { start: weekStartDate, end: weekEndDate } });
   }
-  console.log("weekArr:", weekArr);
   return weekArr;
 }
 

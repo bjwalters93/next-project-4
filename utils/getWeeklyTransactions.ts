@@ -18,7 +18,6 @@ export default async function getWeeklyTransactions() {
       throw new Error("Session is returning null.");
     }
     const week = getWeekRange();
-    console.log("week:", week);
     const client = await clientPromise;
     const db = client.db("user_data");
     const collection = db.collection("user_transactions");
