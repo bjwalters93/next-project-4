@@ -1,15 +1,9 @@
 "use client";
 
 import { FormEvent } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useCustomFetch from "@/custom_hooks/useCustomFetch";
-
-// BUG!!! There is a bug when using radio buttons with next js.
-// You can read more here. https://github.com/vercel/next.js/issues/49499
-// Reading the comments you will find that removing the name attribute solves the issue. The name attribute is used to group
-// radio buttons, this allows only one to be selected at a time. This isn't necessary when controlling the component with
-// state. If you control the checked attribute with state(like what's happening below), only one can be checked anyway.
 
 type Transaction = {
   type: string;
@@ -24,6 +18,8 @@ export default function TransactionHistoryUI() {
   const [radioOption, setRadioOption] = useState("week");
   const [year, setYear] = useState<string | null>(null);
   const [month, setMonth] = useState<string | null>(null);
+  console.log("month:", month);
+  console.log("year:", year);
 
   const args = {
     radio: radioOption,
@@ -33,7 +29,7 @@ export default function TransactionHistoryUI() {
 
   const { transactions, isLoading, isError } = useCustomFetch(args);
 
-  function handleSubmit(event: FormEvent) {
+  function handleSubmitMonth(event: FormEvent) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const data = {
@@ -41,6 +37,16 @@ export default function TransactionHistoryUI() {
       year: form.year.value as string,
     };
     setMonth(data.month);
+    setYear(data.year);
+  }
+
+  function handleSubmitYear(event: FormEvent) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const data = {
+      year: form.year.value as string,
+    };
+    setMonth(null);
     setYear(data.year);
   }
 
@@ -62,6 +68,17 @@ export default function TransactionHistoryUI() {
 
   function onOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRadioOption(event.target.value);
+    if (event.target.value === "month") {
+      const month = new Date().getMonth() + 1;
+      setMonth(month.toString());
+      setYear(new Date().getFullYear().toString());
+    } else if (event.target.value === "year") {
+      setMonth(null);
+      setYear(new Date().getFullYear().toString());
+    } else if (event.target.value === "week") {
+      setMonth(null);
+      setYear(null);
+    }
   }
 
   const monthsArr = [
@@ -80,14 +97,22 @@ export default function TransactionHistoryUI() {
   ];
 
   const optionsMonth: JSX.Element[] = monthsArr.map((el, i) => {
-    return <option value={i + 1}>{el}</option>;
+    return (
+      <option key={el} value={i + 1}>
+        {el}
+      </option>
+    );
   });
 
   const yearsOptions: JSX.Element[] = [];
   const currentYear = new Date().getFullYear();
   for (let i = 1; i < 101; i++) {
     let year = currentYear - i;
-    yearsOptions.push(<option value={year}>{year}</option>);
+    yearsOptions.push(
+      <option key={year} value={year}>
+        {year}
+      </option>
+    );
   }
 
   return (
@@ -120,12 +145,27 @@ export default function TransactionHistoryUI() {
         <label htmlFor="yearly">Yearly</label>
       </form>
       {radioOption === "month" && (
-        <form /*onSubmit={handleSubmit}*/>
+        <form onSubmit={handleSubmitMonth}>
           <label htmlFor="month">Choose a month:</label>
           <select className="border border-black" id="month" name="month">
             <option value={new Date().getMonth() + 1}>Current</option>
             {optionsMonth}
           </select>
+          <label htmlFor="year">Choose a year:</label>
+          <select className="border border-black" id="year" name="year">
+            <option value={new Date().getFullYear()}>Current</option>
+            {yearsOptions}
+          </select>
+          <button
+            className="border border-black bg-black text-lime-400"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      )}
+      {radioOption === "year" && (
+        <form onSubmit={handleSubmitYear}>
           <label htmlFor="year">Choose a year:</label>
           <select className="border border-black" id="year" name="year">
             <option value={new Date().getFullYear()}>Current</option>

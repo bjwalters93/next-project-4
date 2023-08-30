@@ -10,7 +10,10 @@ type Transaction = {
   transactionCode: string;
 };
 
-export default async function getTransactionsByMY() {
+export default async function getTransactionsForMY(
+  month: string | null,
+  year: string | null
+) {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -19,15 +22,13 @@ export default async function getTransactionsByMY() {
     const client = await clientPromise;
     const db = client.db("user_data");
     const collection = db.collection("user_transactions");
-    const year = new Date().getFullYear();
-    console.log("year:", year);
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,
         type: "income",
         $and: [
-          { $expr: { $eq: [{ $month: "$date" }, 2] } },
-          { $expr: { $eq: [{ $year: "$date" }, 1993] } },
+          { $expr: { $eq: [{ $month: "$date" }, Number(month)] } },
+          { $expr: { $eq: [{ $year: "$date" }, Number(year)] } },
         ],
       })
       .project({
@@ -43,6 +44,6 @@ export default async function getTransactionsByMY() {
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getTransactionsByMY()");
+    throw new Error("Error: Failed to fetch getTransactionsForMY()");
   }
 }
