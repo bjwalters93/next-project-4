@@ -1,4 +1,4 @@
-export default function getWeekRange() {
+export function getWeekRange() {
   const date = new Date();
   const dayOfMonth = date.getDate();
   let weekday;
@@ -31,6 +31,26 @@ export default function getWeekRange() {
     .toISOString()
     .slice(0, 10);
   return { range };
+}
+
+export function getPrev52Weeks() {
+  const currentWeekRange = getWeekRange();
+  const weekArr = [];
+  const startLoopDate = new Date(currentWeekRange.range.start);
+  const endLoopDate = new Date(currentWeekRange.range.end);
+  for (let i = 0; i < 52; i++) {
+    const weekStartDate = new Date(
+      startLoopDate.setDate(startLoopDate.getDate() - 7)
+    )
+      .toISOString()
+      .slice(0, 10);
+    const weekEndDate = new Date(endLoopDate.setDate(endLoopDate.getDate() - 7))
+      .toISOString()
+      .slice(0, 10);
+    weekArr.push({ weekStart: weekStartDate, weekEnd: weekEndDate });
+  }
+  console.log("weekArr:", weekArr);
+  return weekArr;
 }
 
 // ---Referance below

@@ -4,6 +4,7 @@ import { FormEvent } from "react";
 // import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useCustomFetch from "@/custom_hooks/useCustomFetch";
+import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 
 type Transaction = {
   type: string;
@@ -16,15 +17,19 @@ type Transaction = {
 
 export default function TransactionHistoryUI() {
   const [radioOption, setRadioOption] = useState("week");
-  const [year, setYear] = useState<string | null>(null);
+  const [week, setWeek] = useState<string | null>(
+    JSON.stringify(getWeekRange())
+  );
   const [month, setMonth] = useState<string | null>(null);
+  const [year, setYear] = useState<string | null>(null);
   console.log("month:", month);
   console.log("year:", year);
 
   const args = {
     radio: radioOption,
-    year: year,
+    week: week,
     month: month,
+    year: year,
   };
 
   const { transactions, isLoading, isError } = useCustomFetch(args);
@@ -70,16 +75,28 @@ export default function TransactionHistoryUI() {
     setRadioOption(event.target.value);
     if (event.target.value === "month") {
       const month = new Date().getMonth() + 1;
+      setWeek(null);
       setMonth(month.toString());
       setYear(new Date().getFullYear().toString());
     } else if (event.target.value === "year") {
+      setWeek(null);
       setMonth(null);
       setYear(new Date().getFullYear().toString());
     } else if (event.target.value === "week") {
+      setWeek(JSON.stringify(getWeekRange()));
       setMonth(null);
       setYear(null);
     }
   }
+
+  const optionsWeek: JSX.Element[] = getPrev52Weeks().map((el, i) => {
+    const valueString = JSON.stringify(el);
+    return (
+      <option key={i} value={valueString}>
+        {el.weekStart} to {el.weekEnd}
+      </option>
+    );
+  });
 
   const monthsArr = [
     "January",
@@ -104,11 +121,11 @@ export default function TransactionHistoryUI() {
     );
   });
 
-  const yearsOptions: JSX.Element[] = [];
+  const optionsYear: JSX.Element[] = [];
   const currentYear = new Date().getFullYear();
   for (let i = 1; i < 101; i++) {
     let year = currentYear - i;
-    yearsOptions.push(
+    optionsYear.push(
       <option key={year} value={year}>
         {year}
       </option>
@@ -126,7 +143,7 @@ export default function TransactionHistoryUI() {
           checked={radioOption === "week"}
           onChange={onOptionChange}
         />
-        <label htmlFor="weekly">This week</label>
+        <label htmlFor="weekly">Weekly</label>
         <input
           type="radio"
           id="monthly"
@@ -144,6 +161,21 @@ export default function TransactionHistoryUI() {
         />
         <label htmlFor="yearly">Yearly</label>
       </form>
+      {radioOption === "week" && (
+        <form onSubmit={handleSubmitYear}>
+          <label htmlFor="week">Choose a week:</label>
+          <select className="border border-black" id="week" name="week">
+            <option value={JSON.stringify(getWeekRange())}>Current</option>
+            {optionsWeek}
+          </select>
+          <button
+            className="border border-black bg-black text-lime-400"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      )}
       {radioOption === "month" && (
         <form onSubmit={handleSubmitMonth}>
           <label htmlFor="month">Choose a month:</label>
@@ -154,7 +186,7 @@ export default function TransactionHistoryUI() {
           <label htmlFor="year">Choose a year:</label>
           <select className="border border-black" id="year" name="year">
             <option value={new Date().getFullYear()}>Current</option>
-            {yearsOptions}
+            {optionsYear}
           </select>
           <button
             className="border border-black bg-black text-lime-400"
@@ -169,7 +201,7 @@ export default function TransactionHistoryUI() {
           <label htmlFor="year">Choose a year:</label>
           <select className="border border-black" id="year" name="year">
             <option value={new Date().getFullYear()}>Current</option>
-            {yearsOptions}
+            {optionsYear}
           </select>
           <button
             className="border border-black bg-black text-lime-400"

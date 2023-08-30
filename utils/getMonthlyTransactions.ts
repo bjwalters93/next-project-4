@@ -36,6 +36,7 @@ export default async function getMonthlyTransactions() {
         transactionCode: 1,
         _id: 0,
       })
+      .sort({ date: -1 })
       .toArray();
     return transactions;
   } catch (e) {

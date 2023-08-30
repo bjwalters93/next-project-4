@@ -1,6 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import { getSessionStatus } from "@/utils/getSessionStatus";
-import getWeekRange from "./getWeekOf";
+import { getWeekRange } from "./getWeekOf";
 
 type Transaction = {
   type: string;
@@ -40,6 +40,7 @@ export default async function getWeeklyTransactions() {
         transactionCode: 1,
         _id: 0,
       })
+      .sort({ date: -1 })
       .toArray();
     return transactions;
   } catch (e) {

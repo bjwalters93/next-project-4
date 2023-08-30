@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import { getSessionStatus } from "@/utils/getSessionStatus";
+import { getWeekRange } from "./getWeekOf";
 
 type Transaction = {
   type: string;
@@ -10,7 +11,9 @@ type Transaction = {
   transactionCode: string;
 };
 
-export default async function getTransactionsForYear(year: string | null) {
+export default async function getTransactionsForWeek(week: {
+  range: { start: string; end: string };
+}) {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -23,7 +26,10 @@ export default async function getTransactionsForYear(year: string | null) {
       .find<Transaction>({
         userId: session.user.userId,
         type: "income",
-        $expr: { $eq: [{ $year: "$date" }, Number(year)] },
+        date: {
+          $gte: new Date(week.range.start),
+          $lte: new Date(week.range.end),
+        },
       })
       .project({
         type: 1,
@@ -39,6 +45,6 @@ export default async function getTransactionsForYear(year: string | null) {
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getTransactionsForYear()");
+    throw new Error("Error: Failed to fetch getTransactionsForWeek()");
   }
 }

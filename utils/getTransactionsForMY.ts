@@ -40,6 +40,7 @@ export default async function getTransactionsForMY(
         transactionCode: 1,
         _id: 0,
       })
+      .sort({ date: -1 })
       .toArray();
     return transactions;
   } catch (e) {
