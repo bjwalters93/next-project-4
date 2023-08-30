@@ -3,6 +3,7 @@
 // import Link from "next/link";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import incomeFormSubmit from "@/utils/incomeFormSubmit";
 
 export default function AddIncomeFormUI() {
   const router = useRouter();
@@ -24,6 +25,9 @@ export default function AddIncomeFormUI() {
     });
     const result = await response.json();
     router.refresh();
+    // router.refresh(): Refresh the current route. Making a new request to the server, re-fetching data requests, and re-rendering Server Components.
+    // The client will merge the updated React Server Component payload without losing unaffected client-side React (e.g. useState)
+    // or browser state (e.g. scroll position).
     console.log("result:", result);
     alert(
       `Is this the correct entry?: ${result.res.source} ${result.res.amount} ${result.res.date} ${result.res.notes}`
@@ -33,7 +37,7 @@ export default function AddIncomeFormUI() {
     <div className="border mb-10">
       <h1 className="font-semibold mb-[10px] text-2xl">Add Income</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form /*onSubmit={handleSubmit}*/ action={incomeFormSubmit}>
         <label
           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
           htmlFor="source"
