@@ -1,9 +1,8 @@
 "use client";
 
-// import Link from "next/link";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import incomeFormSubmit from "@/utils/incomeFormSubmit";
+// import incomeFormSubmit from "@/utils/incomeFormSubmit";
 
 export default function AddIncomeFormUI() {
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function AddIncomeFormUI() {
     <div className="border mb-10">
       <h1 className="font-semibold mb-[10px] text-2xl">Add Income</h1>
 
-      <form /*onSubmit={handleSubmit}*/ action={incomeFormSubmit}>
+      <form onSubmit={handleSubmit} /*action={incomeFormSubmit}*/>
         <label
           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
           htmlFor="source"

@@ -2,6 +2,7 @@
 
 import { FormEvent } from "react";
 import { useState } from "react";
+// import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
 import useCustomFetch from "@/custom_hooks/useCustomFetch";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 
@@ -29,7 +30,14 @@ export default function TransactionHistoryUI() {
     year: year,
   };
 
+  //   const { transactions, isLoading, isError } = useCustomFetchSWR(args);
   const { transactions, isLoading, isError } = useCustomFetch(args);
+  if (isError) {
+    console.log(isError);
+    throw new Error(
+      "Unable to fetch data. useCustomFetch() rh: api/fetchTransactions"
+    );
+  }
 
   function handleSubmitWeek(event: FormEvent) {
     event.preventDefault();
@@ -63,7 +71,7 @@ export default function TransactionHistoryUI() {
   const transactionList: JSX.Element[] = [];
 
   if (transactions) {
-    console.log("transactions:", transactions);
+    console.log("Client:TransactionHistoryUI:", transactions);
     transactions.forEach((el: Transaction) => {
       const formatDate = new Date(el.date).toDateString();
       transactionList.push(
