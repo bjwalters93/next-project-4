@@ -20,6 +20,7 @@ export default function useCustomFetch(args: Args) {
   const { data, error, isLoading } = useSWR(
     `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`,
     fetcher
+    // { refreshInterval: 1000 }
   );
 
   return {

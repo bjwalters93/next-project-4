@@ -7,6 +7,8 @@ import WeeklyPieUI from "@/components/WeeklyPieUI";
 import MonthlyPieUI from "@/components/MonthlyPieUI";
 import YearlyPieUI from "@/components/YearlyPieUI";
 
+export const dynamic = "force-dynamic";
+
 export default async function UserRootPage() {
   return (
     <div>

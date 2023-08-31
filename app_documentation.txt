@@ -103,3 +103,20 @@
     nessecary. Other times it delays load times and diminishes user experience. If possible you should fetch data in parallel, you can use streaming/suspense
     techniques to load components as the data becomes available, if a component is still loading you can display a loader of some kind to notify the user. examples
     of fetching data in Parallel are provided in the link above in the offical next.js docs.
+
+# - So far you have two options(based on current level of knowledge so could be wrong), for revalidating data on server components.
+    (in your case maybe its not so much revalidating as it is updating the UI to match current data. There are several other ways to
+    "revalidate data", revalidating data is a term used when data is cached(i.e it's not dynamic, stays the same) your data isn't cached
+    it's dynamic but the UI on server componets isn't updating automatically.) A: use router.refresh() in form handler.
+    B: Use server action(experimental) and use revalidatePath("/user");
+
+    The main difference is server actions allow access to FormData object, therefor you don't have to set up an event/event handler and
+    prevent default behavior AND there isn't a need four a route handler as you can do everything in the server action.
+
+    Both work in an almost identical way and NEITHER have an effect on client components(or maybe they do as long as the data is not
+    cached on client fetch, THIS IS WHAT SWR IS DOING! it caches data and automatically revalidates on a reFocus event i.e window changes, TBD).
+    Next step is to switch away from SWR and use a regular fetch call(for the purpose of your project it works fine anyway.) After which,
+    determine if the UI updates automatically when the data changes. If it does not, will need a way to auto update UI to match current data.
+
+    Also it's probably better to use server action option because then there isn't a need for route handlers. Either way, probably wouldn't
+    make that big of difference.
