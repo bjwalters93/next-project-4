@@ -24,10 +24,6 @@ export default function AddIncomeFormUI() {
     });
     const result = await response.json();
     router.refresh();
-    // router.refresh(): Refresh the current route. Making a new request to the server, re-fetching data requests,
-    // and re-rendering Server Components(BUT NOT CLIENT COMPONENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!).
-    // The client will merge the updated React Server Component payload without losing unaffected client-side React (e.g. useState)
-    // or browser state (e.g. scroll position).
     console.log("result:", result);
   };
   return (

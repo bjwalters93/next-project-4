@@ -23,6 +23,7 @@ export async function POST(request: Request) {
       transactionCode: uuidv4(),
     };
     const result = await collection.insertOne(doc);
+
     console.log(`A document was inserted with the _id: ${result.insertedId}`);
     return NextResponse.json({ res });
   } catch (e) {

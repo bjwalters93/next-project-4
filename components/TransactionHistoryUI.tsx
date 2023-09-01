@@ -2,9 +2,9 @@
 
 import { FormEvent } from "react";
 import { useState } from "react";
-// import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
-import useCustomFetch from "@/custom_hooks/useCustomFetch";
+import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
+import { useSWRConfig } from "swr";
 
 type Transaction = {
   type: string;
@@ -23,6 +23,8 @@ export default function TransactionHistoryUI() {
   const [month, setMonth] = useState<string | null>(null);
   const [year, setYear] = useState<string | null>(null);
 
+  const { mutate } = useSWRConfig();
+
   const args = {
     radio: radioOption,
     week: week,
@@ -30,8 +32,8 @@ export default function TransactionHistoryUI() {
     year: year,
   };
 
-  //   const { transactions, isLoading, isError } = useCustomFetchSWR(args);
-  const { transactions, isLoading, isError } = useCustomFetch(args);
+  const { transactions, isLoading, isError } = useCustomFetchSWR(args);
+
   if (isError) {
     console.log(isError);
     throw new Error(
@@ -185,6 +187,16 @@ export default function TransactionHistoryUI() {
             type="submit"
           >
             Submit
+          </button>
+          <button
+            className="border border-black bg-black text-red-400"
+            onClick={() =>
+              mutate(
+                `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
+              )
+            }
+          >
+            Refresh
           </button>
         </form>
       )}
