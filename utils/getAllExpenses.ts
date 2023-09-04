@@ -1,19 +1,16 @@
 import clientPromise from "@/lib/mongodb";
 import { getSessionStatus } from "@/utils/getSessionStatus";
-// import { getWeekRange } from "./getWeekOf";
 
 type Transaction = {
   type: string;
-  source: string;
+  category: string;
   amount: string;
   date: string;
   notes: string;
   transactionCode: string;
 };
 
-export default async function getTransactionsForWeek(week: {
-  range: { start: string; end: string };
-}) {
+export default async function getAllExpenses() {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -25,11 +22,7 @@ export default async function getTransactionsForWeek(week: {
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,
-        $or: [{ type: "income" }, { type: "expense" }],
-        date: {
-          $gte: new Date(`${week.range.start} 00:00:00`),
-          $lte: new Date(`${week.range.end} 00:00:00`),
-        },
+        type: "expense",
       })
       .project({
         type: 1,
@@ -45,6 +38,6 @@ export default async function getTransactionsForWeek(week: {
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getTransactionsForWeek()");
+    throw new Error("Error: Failed to fetch getAllExpenses()");
   }
 }

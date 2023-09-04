@@ -10,7 +10,7 @@ type Transaction = {
   transactionCode: string;
 };
 
-export default async function getAllTransactions() {
+export default async function getAllIncome() {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -38,6 +38,6 @@ export default async function getAllTransactions() {
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getAllEarnings()");
+    throw new Error("Error: Failed to fetch getAllIncome()");
   }
 }

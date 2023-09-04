@@ -3,14 +3,14 @@ import { getSessionStatus } from "@/utils/getSessionStatus";
 
 type Transaction = {
   type: string;
-  source: string;
+  category: string;
   amount: string;
   date: string;
   notes: string;
   transactionCode: string;
 };
 
-export default async function getYearlyTransactions() {
+export default async function getMonthlyExpenses() {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -19,13 +19,13 @@ export default async function getYearlyTransactions() {
     const client = await clientPromise;
     const db = client.db("user_data");
     const collection = db.collection("user_transactions");
-    const year = new Date().getFullYear();
-    console.log("year:", year);
+    const month = new Date().getMonth() + 1;
+    console.log("month:", month);
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,
-        type: "income",
-        $expr: { $eq: [{ $year: "$date" }, year] },
+        type: "expense",
+        $expr: { $eq: [{ $month: "$date" }, month] },
       })
       .project({
         type: 1,
@@ -41,6 +41,6 @@ export default async function getYearlyTransactions() {
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getYearlyTransactions()");
+    throw new Error("Error: Failed to fetch getMonthlyExpenses()");
   }
 }

@@ -1,6 +1,5 @@
 "use client";
 
-// import Link from "next/link";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
@@ -10,26 +9,21 @@ export default function AddExpenseFormUI() {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const data = {
-      first: form.first.value as string,
-      last: form.last.value as string,
-      email: form.email.value as string,
+      category: form.category.value,
+      amount: form.amount.value,
+      date: form.date.value,
+      notes: form.notes.value,
     };
-    const response = await fetch("http://localhost:3000/api/postUserForm", {
+    const response = await fetch("http://localhost:3000/api/addExpense", {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
     });
-    // interesting reminder - JSON is a string that represents a javascript object. The .json() method
-    // parses the string and returns an actual javascript object. This is why in the fetch request body(above)
-    // you need to STRINGIFY the object(converts object to JSON).
     const result = await response.json();
     router.refresh();
-    console.log("result:", result);
-    alert(
-      `Is this the correct entry?: ${result.res.first} ${result.res.last} ${result.res.email}`
-    );
+    console.log("post addExpense:", result);
   };
   return (
     <div className="border mb-10">

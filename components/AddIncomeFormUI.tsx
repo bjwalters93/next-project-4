@@ -24,7 +24,7 @@ export default function AddIncomeFormUI() {
     });
     const result = await response.json();
     router.refresh();
-    console.log("result:", result);
+    console.log("post addIncome:", result);
   };
   return (
     <div className="border mb-10">

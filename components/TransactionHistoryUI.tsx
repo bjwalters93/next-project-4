@@ -218,6 +218,16 @@ export default function TransactionHistoryUI() {
           >
             Submit
           </button>
+          <button
+            className="border border-black bg-black text-red-400"
+            onClick={() =>
+              mutate(
+                `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
+              )
+            }
+          >
+            Refresh
+          </button>
         </form>
       )}
       {radioOption === "year" && (
@@ -232,6 +242,16 @@ export default function TransactionHistoryUI() {
             type="submit"
           >
             Submit
+          </button>
+          <button
+            className="border border-black bg-black text-red-400"
+            onClick={() =>
+              mutate(
+                `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
+              )
+            }
+          >
+            Refresh
           </button>
         </form>
       )}

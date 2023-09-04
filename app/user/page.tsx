@@ -1,6 +1,6 @@
 import AddIncomeFormUI from "@/components/AddIncomeFormUI";
 import AddExpenseFormUI from "@/components/AddExpenseFormUI";
-import TotalBalanceDisplay from "@/components/TotalBalanceDisplay";
+import TotalIncomeDisplay from "@/components/TotalIncomeDisplay";
 import TotalExpenseDisplay from "@/components/TotalExpenseDisplay";
 import TransactionHistoryUI from "@/components/TransactionHistoryUI";
 import WeeklyPieUI from "@/components/WeeklyPieUI";
@@ -13,7 +13,7 @@ export default async function UserRootPage() {
   return (
     <div>
       <div>
-        <TotalBalanceDisplay />
+        <TotalIncomeDisplay />
         <TotalExpenseDisplay />
         <TransactionHistoryUI />
       </div>

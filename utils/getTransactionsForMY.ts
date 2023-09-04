@@ -25,7 +25,7 @@ export default async function getTransactionsForMY(
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,
-        type: "income",
+        $or: [{ type: "income" }, { type: "expense" }],
         $and: [
           { $expr: { $eq: [{ $month: "$date" }, Number(month)] } },
           { $expr: { $eq: [{ $year: "$date" }, Number(year)] } },

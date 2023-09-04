@@ -4,14 +4,14 @@ import { getWeekRange } from "./getWeekOf";
 
 type Transaction = {
   type: string;
-  source: string;
+  category: string;
   amount: string;
   date: string;
   notes: string;
   transactionCode: string;
 };
 
-export default async function getWeeklyTransactions() {
+export default async function getWeeklyExpenses() {
   try {
     const session = await getSessionStatus();
     if (session === null) {
@@ -24,7 +24,7 @@ export default async function getWeeklyTransactions() {
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,
-        type: "income",
+        type: "expense",
         date: {
           $gte: new Date(week.range.start),
           $lte: new Date(week.range.end),
@@ -44,6 +44,6 @@ export default async function getWeeklyTransactions() {
     return transactions;
   } catch (e) {
     console.log(e);
-    throw new Error("Error: Failed to fetch getWeeklyTransactions()");
+    throw new Error("Error: Failed to fetch getWeeklyExpenses()");
   }
 }
