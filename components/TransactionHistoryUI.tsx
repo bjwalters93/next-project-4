@@ -247,8 +247,6 @@ export default function TransactionHistoryUI() {
           </button>
         </form>
       )}
-      {/* Transactions Data table goes here to replace temporary list, will need to pass transacionList as prop */}
-      {/* <TransactionsTable data={transactionList} */}
       <TransactionsTable args={args} />
     </div>
   );

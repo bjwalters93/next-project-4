@@ -1,3 +1,5 @@
+"use client";
+
 import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
 
 type Income = {
@@ -38,6 +40,10 @@ export default function TransactionsTable({ args }: Args) {
   }
   const transactionList: JSX.Element[] = [];
 
+  function deleteDoc(transactionCode: string) {
+    fetch(`http://localhost:3000/api/deleteDoc?code=${transactionCode}`);
+  }
+
   if (transactions) {
     transactions.forEach((el: Income | Expense, i: number) => {
       const formatDate = new Date(el.date).toDateString();
@@ -52,7 +58,12 @@ export default function TransactionsTable({ args }: Args) {
           <td>{formatDate}</td>
           <td>{el.notes}</td>
           <th>
-            <button className="btn btn-xs">Remove</button>
+            <button
+              className="btn btn-xs"
+              onClick={() => deleteDoc(el.transactionCode)}
+            >
+              Remove
+            </button>
           </th>
         </tr>
       );
@@ -62,10 +73,6 @@ export default function TransactionsTable({ args }: Args) {
   return (
     <div>
       {isLoading && <span className="loading loading-bars loading-sm"></span>}
-      {/* {transactionList.length === 0 && !isLoading && (
-        <p>No transactions to display.</p>
-      )}
-      {transactionList.length > 0 && !isLoading && <ul>{transactionList}</ul>} */}
       <div className="overflow-x-auto">
         <table className="table table-xs">
           <thead>
