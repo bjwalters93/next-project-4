@@ -6,10 +6,6 @@ import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import { useSWRConfig } from "swr";
 
-import { Button } from "@material-tailwind/react";
-import { Select, Option } from "@material-tailwind/react";
-import { Radio } from "@material-tailwind/react";
-
 type Transaction = {
   type: string;
   source: string;
@@ -154,62 +150,48 @@ export default function TransactionHistoryUI() {
     <div>
       <h2 className="font-bold">Transaction History:</h2>
       <form>
-        <Radio
-          //   type="radio"
-          //   className="!font-bold"
-          labelProps={{ className: "font-bold" }}
-          label="Weekly"
+        <input
+          type="radio"
           id="weekly"
           value="week"
           checked={radioOption === "week"}
           onChange={onOptionChange}
         />
-        {/* <label htmlFor="weekly" className="font-bold">
+        <label htmlFor="weekly" className="font-bold">
           Weekly
-        </label> */}
-        <Radio
-          //   type="radio"
-          label="Monthly"
+        </label>
+        <input
+          type="radio"
           id="monthly"
           value="month"
           checked={radioOption === "month"}
           onChange={onOptionChange}
         />
-        {/* <label htmlFor="monthly">Monthly</label> */}
-        <Radio
-          //   type="radio"
-          label="Yearly"
+        <label htmlFor="monthly">Monthly</label>
+        <input
+          type="radio"
           id="yearly"
           value="year"
           checked={radioOption === "year"}
           onChange={onOptionChange}
         />
-        {/* <label htmlFor="yearly">Yearly</label> */}
+        <label htmlFor="yearly">Yearly</label>
       </form>
       {radioOption === "week" && (
         <form onSubmit={handleSubmitWeek}>
-          {/* <label htmlFor="week">Choose a week:</label> */}
-          <Select
-            // className="border border-black"
-            label="Choose a week:"
-            size="md"
-            id="week"
-            name="week"
-            // className="font-bold"
-          >
-            <Option value={JSON.stringify(getWeekRange())}>Current</Option>
+          <label htmlFor="week">Choose a week:</label>
+          <select className="border border-black" id="week" name="week">
+            <option value={JSON.stringify(getWeekRange())}>Current</option>
             {optionsWeek}
-          </Select>
-          <Button
-            // className="border border-black bg-black text-lime-400"
-            size="sm"
+          </select>
+          <button
+            className="border border-black bg-black text-lime-400"
             type="submit"
           >
             Submit
-          </Button>
-          <Button
-            // className="border border-black bg-black text-red-400"
-            size="sm"
+          </button>
+          <button
+            className="border border-black bg-black text-red-400"
             onClick={() =>
               mutate(
                 `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
@@ -217,7 +199,7 @@ export default function TransactionHistoryUI() {
             }
           >
             Refresh
-          </Button>
+          </button>
         </form>
       )}
       {radioOption === "month" && (

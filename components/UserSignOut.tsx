@@ -19,10 +19,7 @@ export default function UserSignOut({ user }: User) {
     );
   }
   return (
-    <div
-      className="bg-zinc-950 flex justify-between py-2 px-4"
-      //   style={{ backgroundColor: "black" }}
-    >
+    <div className="bg-zinc-950 flex justify-between py-2 px-4">
       <div className="flex items-center">
         <Image
           //   src={session ? url : googleLogo}
