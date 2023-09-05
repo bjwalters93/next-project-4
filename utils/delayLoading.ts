@@ -1,10 +1,10 @@
 // Code for delaying data - to show loading.tsx
 // --------------------------------------------------------------
-export default async function delayLoading() {
+export default async function delayLoading(time: number) {
   let myPromise = new Promise(function (myResolve) {
     setTimeout(function () {
       myResolve("I love You !!");
-    }, 3000);
+    }, time);
   });
   let myPromiseResolved = await myPromise;
   console.log(myPromiseResolved);

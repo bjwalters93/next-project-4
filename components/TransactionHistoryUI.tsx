@@ -150,16 +150,28 @@ export default function TransactionHistoryUI() {
     <div>
       <h2 className="font-bold">Transaction History:</h2>
       <form>
-        <input
+        {/* <input
+          className="radio"
           type="radio"
           id="weekly"
           value="week"
           checked={radioOption === "week"}
           onChange={onOptionChange}
         />
-        <label htmlFor="weekly" className="font-bold">
-          Weekly
-        </label>
+        <label htmlFor="weekly">Weekly</label> */}
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Weekly</span>
+          </label>
+          <input
+            className="radio"
+            type="radio"
+            id="weekly"
+            value="week"
+            checked={radioOption === "week"}
+            onChange={onOptionChange}
+          />
+        </div>
         <input
           type="radio"
           id="monthly"
@@ -184,14 +196,11 @@ export default function TransactionHistoryUI() {
             <option value={JSON.stringify(getWeekRange())}>Current</option>
             {optionsWeek}
           </select>
-          <button
-            className="border border-black bg-black text-lime-400"
-            type="submit"
-          >
+          <button className="btn btn-neutral btn-sm" type="submit">
             Submit
           </button>
           <button
-            className="border border-black bg-black text-red-400"
+            className="btn btn-neutral btn-sm"
             onClick={() =>
               mutate(
                 `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
@@ -257,7 +266,7 @@ export default function TransactionHistoryUI() {
           </button>
         </form>
       )}
-      {isLoading && <p>Loading transactions...</p>}
+      {isLoading && <span className="loading loading-bars loading-sm"></span>}
       {transactionList.length === 0 && !isLoading && (
         <p>No transactions to display.</p>
       )}

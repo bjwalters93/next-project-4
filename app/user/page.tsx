@@ -6,10 +6,12 @@ import TransactionHistoryUI from "@/components/TransactionHistoryUI";
 import WeeklyPieUI from "@/components/WeeklyPieUI";
 import MonthlyPieUI from "@/components/MonthlyPieUI";
 import YearlyPieUI from "@/components/YearlyPieUI";
+import delayLoading from "@/utils/delayLoading";
 
 export const dynamic = "force-dynamic";
 
 export default async function UserRootPage() {
+  await delayLoading(3000);
   return (
     <div>
       <div>
