@@ -28,6 +28,7 @@ export default async function getTransactionsForYear(year: string | null) {
       .project({
         type: 1,
         source: 1,
+        category: 1,
         amount: 1,
         date: 1,
         notes: 1,

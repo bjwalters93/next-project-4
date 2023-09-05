@@ -3,7 +3,6 @@ import useSWR from "swr";
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
-    console.log("fetcher useSWR was called!");
     return res.json();
   });
 
@@ -24,7 +23,6 @@ export default function useCustomFetchSWR(args: Args) {
   //   mutate(
   //     `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
   //   );
-  console.log("useSWR was called!");
   return {
     transactions: data,
     isLoading,
