@@ -159,11 +159,6 @@ export default function TransactionHistoryUI() {
       </form>
       {radioOption === "week" && (
         <form onSubmit={handleSubmitWeek} className="flex items-end">
-          {/* <label htmlFor="week">Choose a week:</label>
-          <select className="border border-black" id="week" name="week">
-            <option value={JSON.stringify(getWeekRange())}>Current</option>
-            {optionsWeek}
-          </select> */}
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Choose a week</span>
@@ -177,11 +172,11 @@ export default function TransactionHistoryUI() {
               {optionsWeek}
             </select>
           </div>
-          <button className="btn btn-neutral btn-sm ml-2" type="submit">
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
           <button
-            className="btn btn-neutral btn-sm ml-2"
+            className="btn btn-primary btn-sm ml-2"
             onClick={() =>
               mutate(
                 `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
@@ -193,25 +188,38 @@ export default function TransactionHistoryUI() {
         </form>
       )}
       {radioOption === "month" && (
-        <form onSubmit={handleSubmitMonth}>
-          <label htmlFor="month">Choose a month:</label>
-          <select className="border border-black" id="month" name="month">
-            <option value={new Date().getMonth() + 1}>Current</option>
-            {optionsMonth}
-          </select>
-          <label htmlFor="year">Choose a year:</label>
-          <select className="border border-black" id="year" name="year">
-            <option value={new Date().getFullYear()}>Current</option>
-            {optionsYear}
-          </select>
-          <button
-            className="border border-black bg-black text-lime-400"
-            type="submit"
-          >
+        <form onSubmit={handleSubmitMonth} className="flex items-end">
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Choose a month</span>
+            </label>
+            <select
+              className="select select-primary select-bordered select-sm"
+              id="month"
+              name="month"
+            >
+              <option value={new Date().getMonth() + 1}>Current</option>
+              {optionsMonth}
+            </select>
+          </div>
+          <div className="form-control w-full max-w-xs ml-2">
+            <label className="label">
+              <span className="label-text">Choose a year</span>
+            </label>
+            <select
+              className="select select-primary select-bordered select-sm"
+              id="year"
+              name="year"
+            >
+              <option value={new Date().getFullYear()}>Current</option>
+              {optionsYear}
+            </select>
+          </div>
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
           <button
-            className="border border-black bg-black text-red-400"
+            className="btn btn-primary btn-sm ml-2"
             onClick={() =>
               mutate(
                 `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
@@ -223,20 +231,25 @@ export default function TransactionHistoryUI() {
         </form>
       )}
       {radioOption === "year" && (
-        <form onSubmit={handleSubmitYear}>
-          <label htmlFor="year">Choose a year:</label>
-          <select className="border border-black" id="year" name="year">
-            <option value={new Date().getFullYear()}>Current</option>
-            {optionsYear}
-          </select>
-          <button
-            className="border border-black bg-black text-lime-400"
-            type="submit"
-          >
+        <form onSubmit={handleSubmitYear} className="flex items-end">
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Choose a year</span>
+            </label>
+            <select
+              className="select select-primary select-bordered select-sm"
+              id="year"
+              name="year"
+            >
+              <option value={new Date().getFullYear()}>Current</option>
+              {optionsYear}
+            </select>
+          </div>
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
           <button
-            className="border border-black bg-black text-red-400"
+            className="btn btn-primary btn-sm ml-2"
             onClick={() =>
               mutate(
                 `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`

@@ -11,7 +11,7 @@ import delayLoading from "@/utils/delayLoading";
 export const dynamic = "force-dynamic";
 
 export default async function UserRootPage() {
-  await delayLoading(3000);
+  await delayLoading(2000);
   return (
     <div>
       <div>

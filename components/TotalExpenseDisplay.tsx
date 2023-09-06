@@ -4,12 +4,20 @@ import getYearlyExpenses from "@/utils/getYearlyExpenses";
 import getExpenses from "@/utils/getExpenses";
 
 export default async function TotalExpenseDisplay() {
-  const weeklyExpenses = await getWeeklyExpenses();
-  const monthlyExpenses = await getMonthlyExpenses();
-  const yearlyExpenses = await getYearlyExpenses();
+  const weeklyExpensesData = getWeeklyExpenses();
+  const monthlyExpensesData = getMonthlyExpenses();
+  const yearlyExpensesData = getYearlyExpenses();
+
+  const [weeklyExpenses, monthlyExpenses, yearlyExpenses] = await Promise.all([
+    weeklyExpensesData,
+    monthlyExpensesData,
+    yearlyExpensesData,
+  ]);
+
   const weeklySpending = getExpenses(weeklyExpenses);
   const monthlySpending = getExpenses(monthlyExpenses);
   const yearlySpending = getExpenses(yearlyExpenses);
+
   return (
     <div className="border">
       <h2 className="font-semibold">Total Expenses</h2>

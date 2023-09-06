@@ -5,9 +5,16 @@ import getYearlyIncome from "@/utils/getYearlyIncome";
 import getEarnings from "@/utils/getEarnings";
 
 export default async function TotalIncomeDisplay() {
-  const weeklyIncome = await getWeeklyIncome();
-  const monthlyIncome = await getMonthlyIncome();
-  const yearlyIncome = await getYearlyIncome();
+  const weeklyIncomeData = getWeeklyIncome();
+  const monthlyIncomeData = getMonthlyIncome();
+  const yearlyIncomeData = getYearlyIncome();
+
+  const [weeklyIncome, monthlyIncome, yearlyIncome] = await Promise.all([
+    weeklyIncomeData,
+    monthlyIncomeData,
+    yearlyIncomeData,
+  ]);
+
   const weeklyEarnings = getEarnings(weeklyIncome);
   const monthlyEarnings = getEarnings(monthlyIncome);
   const yearlyEarnings = getEarnings(yearlyIncome);
