@@ -2,9 +2,9 @@
 
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-// import googleLogo from "../public/google-logo.png";
 import modeIcon from "../public/modeIcon.png";
 import expandIcon from "../public/expandIcon.png";
+import { useRouter } from "next/navigation";
 
 type User = {
   user: {
@@ -14,12 +14,66 @@ type User = {
   };
 };
 
+function setTheme(theme: string) {
+  return fetch(`http://localhost:3000/api/updateTheme?theme=${theme}`);
+}
+
+const themesArr = [
+  "light",
+  "dark",
+  "cupcake",
+  "bumblebee",
+  "emerald",
+  "corporate",
+  "synthwave",
+  "retro",
+  "cyberpunk",
+  "valentine",
+  "halloween",
+  "garden",
+  "forest",
+  "aqua",
+  "lofi",
+  "pastel",
+  "fantasy",
+  "wireframe",
+  "black",
+  "luxury",
+  "dracula",
+  "cmyk",
+  "autumn",
+  "business",
+  "acid",
+  "lemonade",
+  "night",
+  "coffee",
+  "winter",
+];
+
 export default function UserSignOut({ user }: User) {
+  const router = useRouter();
+
   if (typeof user.image !== "string") {
     throw new Error(
       "Image src attribute is not equal to string --> user image display in UserSignOutComponent "
     );
   }
+
+  const themeButtons = themesArr.map((el, i) => {
+    return (
+      <li
+        key={i}
+        className="btn btn-ghost normal-case"
+        onClick={async () => {
+          await setTheme(el);
+          router.refresh();
+        }}
+      >
+        {el.charAt(0).toUpperCase() + el.slice(1)}
+      </li>
+    );
+  });
+
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
@@ -34,27 +88,21 @@ export default function UserSignOut({ user }: User) {
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            className="dropdown-content z-[1] menu flex-nowrap p-2 shadow bg-base-100 rounded-box w-52 max-h-96 overflow-y-scroll"
           >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
+            {themeButtons}
           </ul>
         </div>
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
               <Image
-                //   src={session ? url : googleLogo}
                 src={user.image}
                 alt="Picture of the signed in user."
                 width={40}
                 height={40}
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+K9XDwAD4gGu3HCNbQAAAABJRU5ErkJggg==" // automatically provided
-                placeholder="blur" // Optional blur-up while loading
+                placeholder="blur"
                 className="rounded-full"
               />
             </div>
@@ -74,27 +122,5 @@ export default function UserSignOut({ user }: User) {
         </div>
       </div>
     </div>
-    // <div className="flex justify-between py-2 px-4">
-    //   <div className="flex items-center">
-    //     <Image
-    //       //   src={session ? url : googleLogo}
-    //       src={user.image}
-    //       alt="Picture of the signed in user."
-    //       width={40}
-    //       height={40}
-    //       blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+K9XDwAD4gGu3HCNbQAAAABJRU5ErkJggg==" // automatically provided
-    //       placeholder="blur" // Optional blur-up while loading
-    //       className="mr-1 rounded-full border border-white"
-    //     />
-    //     <p className="font-medium">Signed in as {user.email}</p>
-    //   </div>
-
-    //   <button
-    //     className="focus:outline-none text-white hover:text-lime-400 font-medium"
-    //     onClick={() => signOut({ callbackUrl: "http://localhost:3000" })}
-    //   >
-    //     Sign out
-    //   </button>
-    // </div>
   );
 }

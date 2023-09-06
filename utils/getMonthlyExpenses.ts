@@ -20,7 +20,6 @@ export default async function getMonthlyExpenses() {
     const db = client.db("user_data");
     const collection = db.collection("user_transactions");
     const month = new Date().getMonth() + 1;
-    console.log("month:", month);
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,

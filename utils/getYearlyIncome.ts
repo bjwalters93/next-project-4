@@ -20,7 +20,6 @@ export default async function getYearlyIncome() {
     const db = client.db("user_data");
     const collection = db.collection("user_transactions");
     const year = new Date().getFullYear();
-    console.log("year:", year);
     const transactions = await collection
       .find<Transaction>({
         userId: session.user.userId,
