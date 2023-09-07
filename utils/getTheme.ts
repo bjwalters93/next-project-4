@@ -9,9 +9,11 @@ export default async function getTheme() {
     }
     const client = await clientPromise;
     const db = client.db("user_data");
-    const userTheme = await db.collection("user_themes").findOne({
-      userId: session.user.userId,
-    });
+    const userTheme = await db
+      .collection<{ theme: string }>("user_themes")
+      .findOne({
+        userId: session.user.userId,
+      });
     return userTheme;
   } catch (e) {
     console.log(e);

@@ -8,19 +8,20 @@ export default async function UserPageLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user: userData } = (await getSessionStatus()) as Session;
-  const themeData = await getTheme();
+  const sessionData = getSessionStatus();
+  const themeData = getTheme();
 
-  const [user, settings] = await Promise.all([userData, themeData]);
-  console.log("user:LO:", user);
-  console.log("settings:LO:", settings);
+  const [userData, settings] = (await Promise.all([
+    sessionData,
+    themeData,
+  ])) as [Session, { theme: string } | null];
 
-  delete user.userId;
+  delete userData.user.userId;
 
   return (
     <div data-theme={settings ? settings.theme : "corporate"}>
       <UserSignOut
-        user={user}
+        user={userData.user}
         theme={settings ? settings.theme : "corporate"}
       />
       {children}
