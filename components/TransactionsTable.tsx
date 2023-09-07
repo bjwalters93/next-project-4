@@ -1,6 +1,7 @@
 "use client";
 
 import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
+import { useSWRConfig } from "swr";
 
 type Income = {
   type: string;
@@ -30,7 +31,9 @@ type Args = {
 };
 
 export default function TransactionsTable({ args }: Args) {
-  const { transactions, isLoading, isError } = useCustomFetchSWR(args);
+  const { transactions, isLoading, isError, isValidating, mutate } =
+    useCustomFetchSWR(args);
+  //   const { mutate } = useSWRConfig();
 
   if (isError) {
     console.log(isError);
@@ -41,7 +44,7 @@ export default function TransactionsTable({ args }: Args) {
   const transactionList: JSX.Element[] = [];
 
   function deleteDoc(transactionCode: string) {
-    fetch(`http://localhost:3000/api/deleteDoc?code=${transactionCode}`);
+    return fetch(`http://localhost:3000/api/deleteDoc?code=${transactionCode}`);
   }
 
   if (transactions) {
@@ -60,7 +63,10 @@ export default function TransactionsTable({ args }: Args) {
           <th>
             <button
               className="btn btn-xs"
-              onClick={() => deleteDoc(el.transactionCode)}
+              onClick={async () => {
+                await deleteDoc(el.transactionCode);
+                mutate();
+              }}
             >
               Remove
             </button>
@@ -72,7 +78,10 @@ export default function TransactionsTable({ args }: Args) {
 
   return (
     <div>
-      {isLoading && <span className="loading loading-bars loading-sm"></span>}
+      {isLoading ||
+        (isValidating && (
+          <span className="loading loading-bars loading-sm"></span>
+        ))}
       <div className="overflow-x-auto">
         <table className="table table-xs">
           <thead>
@@ -88,12 +97,15 @@ export default function TransactionsTable({ args }: Args) {
             </tr>
           </thead>
           <tbody>
-            {transactionList.length === 0 && !isLoading && (
+            {transactionList.length === 0 && !isLoading && !isValidating && (
               <tr>
                 <td>No transactions to display.</td>
               </tr>
             )}
-            {transactionList.length > 0 && !isLoading && transactionList}
+            {transactionList.length > 0 &&
+              !isLoading &&
+              !isValidating &&
+              transactionList}
           </tbody>
         </table>
       </div>

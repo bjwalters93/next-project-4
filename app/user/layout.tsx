@@ -19,7 +19,10 @@ export default async function UserPageLayout({
 
   return (
     <div data-theme={settings ? settings.theme : "corporate"}>
-      <UserSignOut user={user} />
+      <UserSignOut
+        user={user}
+        theme={settings ? settings.theme : "corporate"}
+      />
       {children}
     </div>
   );

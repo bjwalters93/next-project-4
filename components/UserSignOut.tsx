@@ -2,16 +2,20 @@
 
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import modeIcon from "../public/modeIcon.png";
-import expandIcon from "../public/expandIcon.png";
+import modeIconBlack from "../public/modeIconBlack.png";
+import expandIconBlack from "../public/expandIconBlack.png";
+import modeIconWhite from "../public/modeIconWhite.png";
+import expandIconWhite from "../public/expandIconWhite.png";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
-type User = {
+type Props = {
   user: {
     name?: string;
     email?: string;
     image?: string;
   };
+  theme: string;
 };
 
 function setTheme(theme: string) {
@@ -50,8 +54,14 @@ const themesArr = [
   "winter",
 ];
 
-export default function UserSignOut({ user }: User) {
+export default function UserSignOut({ user, theme }: Props) {
+  const [currentTheme, setCurrentTheme] = useState<string>(theme);
   const router = useRouter();
+
+  useEffect(() => {
+    console.log("theme:", theme);
+    setCurrentTheme(theme);
+  }, [theme]);
 
   if (typeof user.image !== "string") {
     throw new Error(
@@ -74,6 +84,24 @@ export default function UserSignOut({ user }: User) {
     );
   });
 
+  let lightOrDark: string = "black";
+
+  if (
+    currentTheme === "dark" ||
+    currentTheme === "synthwave" ||
+    currentTheme === "halloween" ||
+    currentTheme === "forest" ||
+    currentTheme === "aqua" ||
+    currentTheme === "black" ||
+    currentTheme === "luxury" ||
+    currentTheme === "dracula" ||
+    currentTheme === "business" ||
+    currentTheme === "night" ||
+    currentTheme === "coffee"
+  ) {
+    lightOrDark = "white";
+  }
+
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
@@ -82,9 +110,19 @@ export default function UserSignOut({ user }: User) {
       <div className="flex-none">
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost m-1 normal-case">
-            <Image src={modeIcon} alt="mode icon" width={25} height={25} />
+            <Image
+              src={lightOrDark === "white" ? modeIconWhite : modeIconBlack}
+              alt="mode icon"
+              width={25}
+              height={25}
+            />
             Theme
-            <Image src={expandIcon} alt="mode icon" width={15} height={15} />
+            <Image
+              src={lightOrDark === "white" ? expandIconWhite : expandIconBlack}
+              alt="mode icon"
+              width={15}
+              height={15}
+            />
           </label>
           <ul
             tabIndex={0}

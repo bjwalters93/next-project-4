@@ -15,7 +15,7 @@ type Args = {
 
 export default function useCustomFetchSWR(args: Args) {
   //   const { mutate } = useSWRConfig();
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, isValidating, mutate } = useSWR(
     `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`,
     fetcher
     // { refreshInterval: 1000 }
@@ -27,5 +27,7 @@ export default function useCustomFetchSWR(args: Args) {
     transactions: data,
     isLoading,
     isError: error,
+    isValidating,
+    mutate,
   };
 }
