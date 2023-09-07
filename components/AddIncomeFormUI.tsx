@@ -2,9 +2,8 @@
 
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-// import incomeFormSubmit from "@/utils/incomeFormSubmit";
 
-export default function AddIncomeFormUI() {
+export default function AddIncomeFormUI({ mutate }: any) {
   const router = useRouter();
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -23,6 +22,7 @@ export default function AddIncomeFormUI() {
       method: "POST",
     });
     const result = await response.json();
+    mutate();
     router.refresh();
     console.log("post addIncome:", result);
   };
@@ -30,7 +30,7 @@ export default function AddIncomeFormUI() {
     <div className="border mb-10">
       <h1 className="font-semibold mb-[10px] text-2xl">Add Income</h1>
 
-      <form onSubmit={handleSubmit} /*action={incomeFormSubmit}*/>
+      <form onSubmit={handleSubmit}>
         <label
           className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
           htmlFor="source"

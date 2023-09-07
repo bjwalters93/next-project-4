@@ -1,28 +1,40 @@
 "use client";
 
 import { FormEvent } from "react";
-import { useState } from "react";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
-import { useSWRConfig } from "swr";
 import TransactionsTable from "./TransactionsTable";
 
-export default function TransactionHistoryUI() {
-  const [radioOption, setRadioOption] = useState("week");
-  const [week, setWeek] = useState<string | null>(
-    JSON.stringify(getWeekRange())
-  );
-  const [month, setMonth] = useState<string | null>(null);
-  const [year, setYear] = useState<string | null>(null);
+type Props = {
+  radioOption: string;
+  week: string | null;
+  month: string | null;
+  year: string | null;
+  setRadioOption: React.Dispatch<React.SetStateAction<string>>;
+  setWeek: React.Dispatch<React.SetStateAction<string | null>>;
+  setMonth: React.Dispatch<React.SetStateAction<string | null>>;
+  setYear: React.Dispatch<React.SetStateAction<string | null>>;
+  transactions: any;
+  isLoading: boolean;
+  isError: any;
+  isValidating: boolean;
+  mutate: any;
+};
 
-  const { mutate } = useSWRConfig();
-
-  const args = {
-    radio: radioOption,
-    week: week,
-    month: month,
-    year: year,
-  };
-
+export default function TransactionHistoryUI({
+  radioOption,
+  //   week,
+  //   month,
+  //   year,
+  setRadioOption,
+  setWeek,
+  setMonth,
+  setYear,
+  transactions,
+  isLoading,
+  isError,
+  isValidating,
+  mutate,
+}: Props) {
   function handleSubmitWeek(event: FormEvent) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
@@ -175,16 +187,6 @@ export default function TransactionHistoryUI() {
           <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
-          <button
-            className="btn btn-primary btn-sm ml-2"
-            onClick={() =>
-              mutate(
-                `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
-              )
-            }
-          >
-            Refresh
-          </button>
         </form>
       )}
       {radioOption === "month" && (
@@ -218,16 +220,6 @@ export default function TransactionHistoryUI() {
           <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
-          <button
-            className="btn btn-primary btn-sm ml-2"
-            onClick={() =>
-              mutate(
-                `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
-              )
-            }
-          >
-            Refresh
-          </button>
         </form>
       )}
       {radioOption === "year" && (
@@ -248,19 +240,15 @@ export default function TransactionHistoryUI() {
           <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
-          <button
-            className="btn btn-primary btn-sm ml-2"
-            onClick={() =>
-              mutate(
-                `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`
-              )
-            }
-          >
-            Refresh
-          </button>
         </form>
       )}
-      <TransactionsTable args={args} />
+      <TransactionsTable
+        transactions={transactions}
+        isLoading={isLoading}
+        isError={isError}
+        isValidating={isValidating}
+        mutate={mutate}
+      />
     </div>
   );
 }

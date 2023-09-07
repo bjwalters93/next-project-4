@@ -3,7 +3,7 @@
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AddExpenseFormUI() {
+export default function AddExpenseFormUI({ mutate }: any) {
   const router = useRouter();
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -22,6 +22,7 @@ export default function AddExpenseFormUI() {
       method: "POST",
     });
     const result = await response.json();
+    mutate();
     router.refresh();
     console.log("post addExpense:", result);
   };

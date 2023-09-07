@@ -1,7 +1,6 @@
 "use client";
 
-import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
-import { useSWRConfig } from "swr";
+import { useRouter } from "next/navigation";
 
 type Income = {
   type: string;
@@ -21,26 +20,29 @@ type Expense = {
   transactionCode: string;
 };
 
-type Args = {
-  args: {
-    radio: string;
-    week: string | null;
-    month: string | null;
-    year: string | null;
-  };
+type Props = {
+  transactions: any;
+  isLoading: boolean;
+  isError: any;
+  isValidating: boolean;
+  mutate: any;
 };
 
-export default function TransactionsTable({ args }: Args) {
-  const { transactions, isLoading, isError, isValidating, mutate } =
-    useCustomFetchSWR(args);
-  //   const { mutate } = useSWRConfig();
-
+export default function TransactionsTable({
+  transactions,
+  isLoading,
+  isError,
+  isValidating,
+  mutate,
+}: Props) {
+  const router = useRouter();
   if (isError) {
     console.log(isError);
     throw new Error(
       "Unable to fetch data. useCustomFetch() rh: api/fetchTransactions"
     );
   }
+
   const transactionList: JSX.Element[] = [];
 
   function deleteDoc(transactionCode: string) {
@@ -66,6 +68,7 @@ export default function TransactionsTable({ args }: Args) {
               onClick={async () => {
                 await deleteDoc(el.transactionCode);
                 mutate();
+                router.refresh();
               }}
             >
               Remove
