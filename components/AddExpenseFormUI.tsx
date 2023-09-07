@@ -27,66 +27,59 @@ export default function AddExpenseFormUI({ mutate }: any) {
     console.log("post addExpense:", result);
   };
   return (
-    <div className="border mb-10">
+    <div className="mb-10">
       <h1 className="font-semibold mb-[10px] text-2xl">Add Expense</h1>
 
       <form onSubmit={handleSubmit}>
-        <label
-          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          htmlFor="category"
-        >
-          Category
-        </label>
-        <input
-          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          type="text"
-          id="category"
-          name="category"
-          required
-        />
-        <label
-          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          htmlFor="amount"
-        >
-          Amount
-        </label>
-        <input
-          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          type="number"
-          id="amount"
-          name="amount"
-          required
-        />
-        <label
-          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          htmlFor="date"
-        >
-          Date
-        </label>
-        <input
-          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          type="date"
-          id="date"
-          name="date"
-          required
-        />
-        <label
-          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          htmlFor="notes"
-        >
-          Notes
-        </label>
-        <input
-          className="appearance-none block bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          type="text"
-          id="notes"
-          name="notes"
-          required
-        />
-        <button
-          className="shadow bg-indigo-700 hover:bg-indigo-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-          type="submit"
-        >
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Category</span>
+          </label>
+          <input
+            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            type="text"
+            id="category"
+            name="category"
+            required
+          />
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Amount</span>
+          </label>
+          <input
+            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            type="number"
+            id="amount"
+            name="amount"
+            required
+          />
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Date</span>
+          </label>
+          <input
+            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            type="date"
+            id="date"
+            name="date"
+            required
+          />
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Notes</span>
+          </label>
+          <input
+            className="input input-bordered input-primary input-sm w-full max-w-xs"
+            type="text"
+            id="notes"
+            name="notes"
+            required
+          />
+        </div>
+        <button className="btn btn-primary btn-sm ml-2" type="submit">
           Submit
         </button>
       </form>
