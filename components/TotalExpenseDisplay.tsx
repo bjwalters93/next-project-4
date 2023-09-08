@@ -19,11 +19,19 @@ export default async function TotalExpenseDisplay() {
   const yearlySpending = getExpenses(yearlyExpenses);
 
   return (
-    <div className="border">
-      <h2 className="font-semibold">Total Expenses</h2>
-      <p>This week: ${weeklySpending}</p>
-      <p>This month: ${monthlySpending}</p>
-      <p>This year: ${yearlySpending}</p>
+    <div className="basis-1/2 border-l-[.5px] border-l-neutral border-y-[.5px] border-y-error">
+      <h2 className="font-semibold text-center">Total Expenses this</h2>
+      <div className="flex">
+        <p className="basis-1/3 text-center bg-base-200">
+          week: ${weeklySpending}
+        </p>
+        <p className="basis-1/3 text-center bg-base-200">
+          month: ${monthlySpending}
+        </p>
+        <p className="basis-1/3 text-center bg-base-200">
+          year: ${yearlySpending}
+        </p>
+      </div>
     </div>
   );
 }

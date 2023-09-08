@@ -92,7 +92,7 @@ export default function UserSignOut({ user, theme }: Props) {
           className={`btn btn-ghost normal-case text-xl ${passero_one.className}`}
         >
           <svg
-            className="fill-primary"
+            // className="fill-primary"
             fill="currentColor"
             width="20"
             height="20"

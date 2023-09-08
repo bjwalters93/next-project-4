@@ -33,7 +33,7 @@ export default function ClientParent() {
 
   return (
     <div className="flex">
-      <div className="flex flex-col pr-10 pl-10 pt-3 bg-base-200 fixed h-screen mt-[72px] border-r-[1px] border-neutral">
+      <div className="flex flex-col pr-10 pl-10 pt-3 bg-base-200 fixed h-screen mt-[139px] border-r-[1px] border-neutral">
         <div className="tabs">
           <a
             className={

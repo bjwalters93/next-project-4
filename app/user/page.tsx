@@ -12,9 +12,9 @@ export default async function UserRootPage() {
   await delayLoading(2000);
   return (
     <div>
-      <div>
-        {/* <TotalIncomeDisplay /> */}
-        {/* <TotalExpenseDisplay /> */}
+      <div className="flex fixed top-[72px] w-full bg-base-300 z-30 border-y-[1px] border-neutral p-2">
+        <TotalIncomeDisplay />
+        <TotalExpenseDisplay />
       </div>
       <ClientParent />
       {/* <div className="flex">

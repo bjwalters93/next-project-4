@@ -45,7 +45,7 @@ export default function AddIncomeFormUI({ mutate }: any) {
         </div>
         <div className="form-control w-full max-w-xs">
           <label className="label">
-            <span className="label-text">Amount</span>
+            <span className="label-text">Amount $</span>
           </label>
           <input
             className="input input-bordered input-primary input-sm w-full max-w-xs"

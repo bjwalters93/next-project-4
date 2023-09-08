@@ -126,7 +126,7 @@ export default function TransactionHistoryUI({
   }
 
   return (
-    <div className="ml-[395.23px] mt-[84px]">
+    <div className="ml-[395.23px] mt-[149px]">
       <h2 className="font-bold">Transaction History:</h2>
       <form className="flex">
         <div className="flex items-center">
