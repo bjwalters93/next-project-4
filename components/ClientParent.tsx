@@ -15,6 +15,12 @@ export default function ClientParent() {
   const [month, setMonth] = useState<string | null>(null);
   const [year, setYear] = useState<string | null>(null);
 
+  const [activeTab, setActiveTab] = useState(1);
+
+  function tabTracker(tab: number) {
+    setActiveTab(tab);
+  }
+
   const args = {
     radio: radioOption,
     week: week,
@@ -26,9 +32,34 @@ export default function ClientParent() {
     useCustomFetchSWR(args);
 
   return (
-    <div>
-      <AddIncomeFormUI mutate={mutate} />
-      <AddExpenseFormUI mutate={mutate} />
+    <div className="flex">
+      <div className="flex flex-col pr-10 pl-10 pt-3 bg-base-200 fixed h-screen mt-[72px]">
+        <div className="tabs">
+          <a
+            className={
+              activeTab === 1
+                ? "tab tab-bordered tab-active"
+                : "tab tab-bordered"
+            }
+            onClick={() => tabTracker(1)}
+          >
+            Add Income
+          </a>
+          <a
+            className={
+              activeTab === 2
+                ? "tab tab-bordered tab-active"
+                : "tab tab-bordered"
+            }
+            onClick={() => tabTracker(2)}
+          >
+            Add Expense
+          </a>
+        </div>
+        {activeTab === 1 && <AddIncomeFormUI mutate={mutate} />}
+        {activeTab === 2 && <AddExpenseFormUI mutate={mutate} />}
+      </div>
+
       <TransactionHistoryUI
         radioOption={radioOption}
         week={week}

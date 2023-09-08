@@ -19,7 +19,10 @@ export default async function UserPageLayout({
   delete userData.user.userId;
 
   return (
-    <div data-theme={settings ? settings.theme : "corporate"}>
+    <div
+      data-theme={settings ? settings.theme : "corporate"}
+      className="min-h-screen"
+    >
       <UserSignOut
         user={userData.user}
         theme={settings ? settings.theme : "corporate"}

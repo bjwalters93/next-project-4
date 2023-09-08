@@ -27,8 +27,8 @@ export default function AddIncomeFormUI({ mutate }: any) {
     console.log("post addIncome:", result);
   };
   return (
-    <div className="mb-10">
-      <h1 className="font-semibold mb-[10px] text-2xl">Add Income</h1>
+    <div className="mt-3 mb-10">
+      {/* <h1 className="font-semibold mb-[10px] text-2xl">Add Income</h1> */}
 
       <form onSubmit={handleSubmit}>
         <div className="form-control w-full max-w-xs">
@@ -79,9 +79,14 @@ export default function AddIncomeFormUI({ mutate }: any) {
             required
           />
         </div>
-        <button className="btn btn-primary btn-sm ml-2" type="submit">
-          Submit
-        </button>
+        <div className="flex mt-3 justify-end">
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
+            Submit
+          </button>
+          <button className="btn btn-warning btn-sm ml-2" type="reset">
+            Reset
+          </button>
+        </div>
       </form>
     </div>
   );

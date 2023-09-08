@@ -103,7 +103,7 @@ export default function UserSignOut({ user, theme }: Props) {
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-300 fixed z-40">
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl">BudgetPirate</a>
       </div>

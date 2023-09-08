@@ -64,7 +64,7 @@ export default function TransactionsTable({
           <td>{el.notes}</td>
           <th>
             <button
-              className="btn btn-xs"
+              className="btn btn-error btn-outline btn-xs"
               onClick={async () => {
                 await deleteDoc(el.transactionCode);
                 mutate();
@@ -80,7 +80,7 @@ export default function TransactionsTable({
   }
 
   return (
-    <div>
+    <div className="mt-5">
       {isLoading ||
         (isValidating && (
           <span className="loading loading-bars loading-sm"></span>

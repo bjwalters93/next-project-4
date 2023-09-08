@@ -13,8 +13,8 @@ export default async function UserRootPage() {
   return (
     <div>
       <div>
-        <TotalIncomeDisplay />
-        <TotalExpenseDisplay />
+        {/* <TotalIncomeDisplay /> */}
+        {/* <TotalExpenseDisplay /> */}
       </div>
       <ClientParent />
       {/* <div className="flex">
