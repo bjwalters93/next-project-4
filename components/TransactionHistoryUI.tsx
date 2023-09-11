@@ -126,7 +126,7 @@ export default function TransactionHistoryUI({
   }
 
   return (
-    <div className="ml-[395.23px] mt-[149px]">
+    <div>
       <h2 className="font-bold">Transaction History:</h2>
       <form className="flex">
         <div className="flex items-center">
@@ -134,7 +134,7 @@ export default function TransactionHistoryUI({
             <span className="label-text">Weekly</span>
           </label>
           <input
-            className="radio radio-secondary"
+            className="radio radio-primary"
             type="radio"
             id="weekly"
             value="week"
@@ -147,7 +147,7 @@ export default function TransactionHistoryUI({
             <span className="label-text">Monthly</span>
           </label>
           <input
-            className="radio radio-secondary"
+            className="radio radio-primary"
             type="radio"
             id="monthly"
             value="month"
@@ -160,7 +160,7 @@ export default function TransactionHistoryUI({
             <span className="label-text">Yearly</span>
           </label>
           <input
-            className="radio radio-secondary"
+            className="radio radio-primary"
             type="radio"
             id="yearly"
             value="year"
@@ -178,13 +178,13 @@ export default function TransactionHistoryUI({
             <select
               id="week"
               name="week"
-              className="select select-secondary select-bordered select-sm"
+              className="select select-primary select-bordered select-sm"
             >
               <option value={JSON.stringify(getWeekRange())}>Current</option>
               {optionsWeek}
             </select>
           </div>
-          <button className="btn btn-secondary btn-sm ml-2" type="submit">
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
         </form>
@@ -196,7 +196,7 @@ export default function TransactionHistoryUI({
               <span className="label-text">Choose a month</span>
             </label>
             <select
-              className="select select-secondary select-bordered select-sm"
+              className="select select-primary select-bordered select-sm"
               id="month"
               name="month"
             >
@@ -209,7 +209,7 @@ export default function TransactionHistoryUI({
               <span className="label-text">Choose a year</span>
             </label>
             <select
-              className="select select-secondary select-bordered select-sm"
+              className="select select-primary select-bordered select-sm"
               id="year"
               name="year"
             >
@@ -217,7 +217,7 @@ export default function TransactionHistoryUI({
               {optionsYear}
             </select>
           </div>
-          <button className="btn btn-secondary btn-sm ml-2" type="submit">
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
         </form>
@@ -229,7 +229,7 @@ export default function TransactionHistoryUI({
               <span className="label-text">Choose a year</span>
             </label>
             <select
-              className="select select-secondary select-bordered select-sm"
+              className="select select-primary select-bordered select-sm"
               id="year"
               name="year"
             >
@@ -237,7 +237,7 @@ export default function TransactionHistoryUI({
               {optionsYear}
             </select>
           </div>
-          <button className="btn btn-secondary btn-sm ml-2" type="submit">
+          <button className="btn btn-primary btn-sm ml-2" type="submit">
             Submit
           </button>
         </form>

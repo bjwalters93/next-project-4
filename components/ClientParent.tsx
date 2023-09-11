@@ -91,22 +91,68 @@ export default function ClientParent() {
         {activeTab === 1 && <AddIncomeFormUI mutate={mutate} />}
         {activeTab === 2 && <AddExpenseFormUI mutate={mutate} />}
       </div>
-
-      <TransactionHistoryUI
-        radioOption={radioOption}
-        week={week}
-        month={month}
-        year={year}
-        setRadioOption={setRadioOption}
-        setWeek={setWeek}
-        setMonth={setMonth}
-        setYear={setYear}
-        transactions={transactions}
-        isLoading={isLoading}
-        isError={isError}
-        isValidating={isValidating}
-        mutate={mutate}
-      />
+      <div className="w-full ml-[355.23px] mt-[139px] p-4">
+        <div className="tabs">
+          <a
+            className={
+              activeTab === 1
+                ? "tab tab-bordered tab-active"
+                : "tab tab-bordered"
+            }
+            onClick={() => tabTracker(1)}
+          >
+            <svg
+              className="mr-1"
+              fill="currentColor"
+              width="18"
+              height="18"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path d="M2 4.5A2.5 2.5 0 014.5 2h11a2.5 2.5 0 010 5h-11A2.5 2.5 0 012 4.5zM2.75 9.083a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H2.75zM2.75 12.663a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H2.75zM2.75 16.25a.75.75 0 000 1.5h14.5a.75.75 0 100-1.5H2.75z"></path>
+            </svg>
+            Charts
+          </a>
+          <a
+            className={
+              activeTab === 2
+                ? "tab tab-bordered tab-active"
+                : "tab tab-bordered"
+            }
+            onClick={() => tabTracker(2)}
+          >
+            <svg
+              className="mr-1"
+              width="18"
+              height="18"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path d="M12 9a1 1 0 01-1-1V3c0-.553.45-1.008.997-.93a7.004 7.004 0 015.933 5.933c.078.547-.378.997-.93.997h-5z"></path>
+              <path d="M8.003 4.07C8.55 3.992 9 4.447 9 5v5a1 1 0 001 1h5c.552 0 1.008.45.93.997A7.001 7.001 0 012 11a7.002 7.002 0 016.003-6.93z"></path>
+            </svg>
+            Transactions
+          </a>
+        </div>
+        <TransactionHistoryUI
+          radioOption={radioOption}
+          week={week}
+          month={month}
+          year={year}
+          setRadioOption={setRadioOption}
+          setWeek={setWeek}
+          setMonth={setMonth}
+          setYear={setYear}
+          transactions={transactions}
+          isLoading={isLoading}
+          isError={isError}
+          isValidating={isValidating}
+          mutate={mutate}
+        />
+      </div>
     </div>
   );
 }
