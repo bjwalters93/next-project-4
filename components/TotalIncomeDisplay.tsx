@@ -21,7 +21,7 @@ export default async function TotalIncomeDisplay() {
 
   return (
     <div className="basis-1/2 border-r-[.5px] border-neutral">
-      <h2 className="font-semibold flex justify-center">
+      <h2 className="font-semibold flex justify-center mb-2">
         <span className="flex items-center">
           <svg
             className="fill-success mr-1"
@@ -33,8 +33,8 @@ export default async function TotalIncomeDisplay() {
             aria-hidden="true"
           >
             <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
+              clipRule="evenodd"
+              fillRule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"
             ></path>
           </svg>

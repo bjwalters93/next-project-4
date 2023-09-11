@@ -126,7 +126,7 @@ export default function TransactionHistoryUI({
   }
 
   return (
-    <div>
+    <div className="mt-2">
       <h2 className="font-bold">Transaction History:</h2>
       <form className="flex">
         <div className="flex items-center">

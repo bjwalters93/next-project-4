@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-// import getWeeklyTransactions from "@/utils/getWeeklyTransactions";
-// import getMonthlyTransactions from "@/utils/getMonthlyTransactions";
-// import getYearlyTransactions from "@/utils/getYearlyTransactions";
 import getTransactionsForWeek from "@/utils/getTransactionsForWeek";
 import getTransactionsForMY from "@/utils/getTransactionsForMY";
 import getTransactionsForYear from "@/utils/getTransactionsForYear";

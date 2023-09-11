@@ -20,7 +20,7 @@ export default async function TotalExpenseDisplay() {
 
   return (
     <div className="basis-1/2 border-l-[.5px] border-l-neutral">
-      <h2 className="font-semibold text-center flex justify-center">
+      <h2 className="font-semibold text-center flex justify-center mb-2">
         <span className="flex items-center">
           <svg
             className="fill-error mr-1"
@@ -32,8 +32,8 @@ export default async function TotalExpenseDisplay() {
             aria-hidden="true"
           >
             <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
+              clipRule="evenodd"
+              fillRule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.75 9.25a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
             ></path>
           </svg>

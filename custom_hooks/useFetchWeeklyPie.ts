@@ -5,16 +5,9 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-type Args = {
-  radio: string;
-  week: null | string;
-  month: null | string;
-  year: null | string;
-};
-
-export default function useCustomFetchSWR(args: Args) {
+export default function useCustomFetchSWR(week: string | null) {
   const { data, error, isLoading, isValidating, mutate } = useSWR(
-    `/api/fetchTransactions?option=${args.radio}&week=${args.week}&month=${args.month}&year=${args.year}`,
+    `/api/fetchWeeklyPie?week=${week}`,
     fetcher
   );
   return {
