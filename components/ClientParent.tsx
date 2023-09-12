@@ -4,10 +4,14 @@ import TransactionHistoryUI from "@/components/TransactionHistoryUI";
 import AddIncomeFormUI from "@/components/AddIncomeFormUI";
 import AddExpenseFormUI from "@/components/AddExpenseFormUI";
 import useCustomFetchSWR from "@/custom_hooks/useCustomFetchSWR";
-import { useState } from "react";
+import { createContext, useState } from "react";
 import { getWeekRange } from "@/utils/getWeekOf";
 import PieChartsUI from "./PieChartsUI";
 import SearchNotesUI from "./SearchNotesUI";
+
+export const fetchWeeklyPieContext = createContext<
+  (string | React.Dispatch<React.SetStateAction<string | null>> | null)[]
+>([]);
 
 export default function ClientParent() {
   const [radioOption, setRadioOption] = useState("week");
@@ -19,6 +23,12 @@ export default function ClientParent() {
 
   const [activeTab_LP, setActiveTab_LP] = useState(1);
   const [activeTab_MP, setActiveTab_MP] = useState(1);
+
+  //   ---States for context---
+  const [week_Pie, setWeek_Pie] = useState<string | null>(
+    JSON.stringify(getWeekRange())
+  );
+  //   ---States for context---
 
   function tabTracker_LP(tab: number) {
     setActiveTab_LP(tab);
@@ -95,8 +105,10 @@ export default function ClientParent() {
             </svg>
           </a>
         </div>
-        {activeTab_LP === 1 && <AddIncomeFormUI mutate={mutate} />}
-        {activeTab_LP === 2 && <AddExpenseFormUI mutate={mutate} />}
+        <fetchWeeklyPieContext.Provider value={[week_Pie, setWeek_Pie]}>
+          {activeTab_LP === 1 && <AddIncomeFormUI mutate={mutate} />}
+          {activeTab_LP === 2 && <AddExpenseFormUI mutate={mutate} />}
+        </fetchWeeklyPieContext.Provider>
       </div>
       <div className="w-full ml-[355.23px] mt-[139px] p-4">
         <div className="tabs">

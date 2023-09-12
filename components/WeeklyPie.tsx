@@ -22,53 +22,78 @@ type Expense = {
 };
 
 export default function WeeklyPie() {
-  const [week, setWeek] = useState<string | null>(
-    JSON.stringify(getWeekRange())
-  );
+  //   const [week, setWeek] = useState<string | null>(
+  //     JSON.stringify(getWeekRange())
+  //   );
   const { transactions, isLoading, isError, isValidating, mutate } =
     useFetchWeeklyPie(week);
 
   const reducedSources: string[] = [];
-  const reducedCategories = [];
+  const reducedCategories: string[] = [];
 
   const incomeTransactions: { source: string; amount: string }[] = [];
   const expenseTransactions: { category: string; amount: string }[] = [];
 
-  //   let arr = ["apple", "mango", "apple", "orange", "mango", "mango"];
-
-  //   function removeDuplicates(arr) {
-  //     let unique = [];
-  //     arr.forEach((element) => {
-  //       if (!unique.includes(element)) {
-  //         unique.push(element);
-  //       }
-  //     });
-  //     return unique;
-  //   }
-  //   console.log(removeDuplicates(arr));
+  let iSum: number = 0;
+  let eSum: number = 0;
 
   transactions?.forEach((el: Income | Expense) => {
     if (el.type === "income") {
-      const source = el.type;
-      const amount = el.amount;
-      if (!reducedSources.includes(el.source)) {
-        reducedSources.push(el.source);
+      const iT = el as Income;
+      iSum += Number(iT.amount);
+      const source = iT.source;
+      const amount = iT.amount;
+      if (!reducedSources.includes(iT.source)) {
+        reducedSources.push(iT.source);
       }
-      //   incomeTransactions.push(el as Income);
       incomeTransactions.push({ source: source, amount: amount });
     } else if (el.type === "expense") {
-      const category = el.type;
-      const amount = el.amount;
-      //   expenseTransactions.push(el as Expense);
+      const eT = el as Expense;
+      eSum += Number(eT.amount);
+      const category = eT.category;
+      const amount = eT.amount;
+      if (!reducedCategories.includes(eT.category)) {
+        reducedCategories.push(eT.category);
+      }
       expenseTransactions.push({ category: category, amount: amount });
     }
   });
 
-  console.log("incomeTransactions:", incomeTransactions);
-  console.log("expenseTransactions:", expenseTransactions);
+  const incomeStats: { name: string; amount: number; percentage: number }[] =
+    [];
+  const expenseStats: { name: string; amount: number; percentage: number }[] =
+    [];
 
-  console.log("sources:", sources);
-  console.log("categories:", categories);
+  reducedSources.forEach((source) => {
+    let sum: number = 0;
+    incomeTransactions.forEach((transaction) => {
+      if (source === transaction.source) {
+        sum += Number(transaction.amount);
+      }
+    });
+    const calculation = (sum / iSum) * 100;
+    incomeStats.push({
+      name: source,
+      amount: sum,
+      percentage: Number(calculation.toFixed(2)),
+    });
+  });
+
+  reducedCategories.forEach((category) => {
+    let sum: number = 0;
+    expenseTransactions.forEach((transaction) => {
+      if (category === transaction.category) {
+        console.log(transaction.amount);
+        sum += Number(transaction.amount);
+      }
+    });
+    const calculation = (sum / eSum) * 100;
+    expenseStats.push({
+      name: category,
+      amount: sum,
+      percentage: Number(calculation.toFixed(2)),
+    });
+  });
 
   function handleSubmitWeek(event: FormEvent) {
     event.preventDefault();
@@ -112,9 +137,33 @@ export default function WeeklyPie() {
           Submit
         </button>
       </form>
+      {/* need to add loading ui & is validating ui, and make sure an undefined/empty arr condition is accounted for regarding transactions. */}
+      {/* add mutate function to add income/expense btns, may have to lift state up */}
+      {/* you do not need to call the fetches at the top level, because you can use the mutate config for swr, therefor you won't need to pass
+      down the mutate function. However, you do need the params */}
+      {/* also will need to optimized fetching, fetch data in parallel and make use of react suspense */}
+      {/* https://dev.to/hey_yogini/usecontext-for-better-state-management-51hi */}
       <ul>
-        {transactions?.map((el: any, i: any) => {
-          return <li key={i}>{el.transactionCode}</li>;
+        {incomeStats?.map((el: any, i: any) => {
+          return (
+            <ul key={i}>
+              <li>Name: {el.name}</li>
+              <li>Amount: {el.amount}</li>
+              <li>Percentage: {el.percentage}</li>
+            </ul>
+          );
+        })}
+      </ul>
+      <hr />
+      <ul>
+        {expenseStats?.map((el: any, i: any) => {
+          return (
+            <ul key={i}>
+              <li>Name: {el.name}</li>
+              <li>Amount: {el.amount}</li>
+              <li>Percentage: {el.percentage}</li>
+            </ul>
+          );
         })}
       </ul>
     </div>
