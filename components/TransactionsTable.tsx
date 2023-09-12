@@ -39,7 +39,7 @@ export default function TransactionsTable({
   if (isError) {
     console.log(isError);
     throw new Error(
-      "Unable to fetch data. useCustomFetch() rh: api/fetchTransactions"
+      "Unable to fetch data. TransactionsTable rh: api/fetchTransactions"
     );
   }
 
@@ -104,33 +104,35 @@ export default function TransactionsTable({
         (isValidating && (
           <span className="loading loading-bars loading-sm"></span>
         ))}
-      <div className="overflow-x-auto">
-        <table className="table table-xs">
-          <thead>
-            <tr className="bg-base-200">
-              <th></th>
-              <th>Transaction Code</th>
-              <th>Type</th>
-              <th>Source/Category</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Notes</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactionList.length === 0 && !isLoading && !isValidating && (
-              <tr>
-                <td>No transactions to display.</td>
+      {!isLoading && !isValidating && (
+        <div className="overflow-x-auto">
+          <table className="table table-xs">
+            <thead>
+              <tr className="bg-base-200">
+                <th></th>
+                <th>Transaction Code</th>
+                <th>Type</th>
+                <th>Source/Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Notes</th>
+                <th></th>
               </tr>
-            )}
-            {transactionList.length > 0 &&
-              !isLoading &&
-              !isValidating &&
-              transactionList}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {transactionList.length === 0 && !isLoading && !isValidating && (
+                <tr>
+                  <td>No transactions to display.</td>
+                </tr>
+              )}
+              {transactionList.length > 0 &&
+                !isLoading &&
+                !isValidating &&
+                transactionList}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

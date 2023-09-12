@@ -9,9 +9,7 @@ import { getWeekRange } from "@/utils/getWeekOf";
 import PieChartsUI from "./PieChartsUI";
 import SearchNotesUI from "./SearchNotesUI";
 
-export const fetchWeeklyPieContext = createContext<
-  (string | React.Dispatch<React.SetStateAction<string | null>> | null)[]
->([]);
+export const fetchWeeklyPieContext = createContext<any>(null);
 
 export default function ClientParent() {
   const [radioOption, setRadioOption] = useState("week");
@@ -24,11 +22,11 @@ export default function ClientParent() {
   const [activeTab_LP, setActiveTab_LP] = useState(1);
   const [activeTab_MP, setActiveTab_MP] = useState(1);
 
-  //   ---States for context---
-  const [week_Pie, setWeek_Pie] = useState<string | null>(
+  //   ---Weekly Pie Logic---
+  const [week_Pie, setWeek_Pie] = useState<string>(
     JSON.stringify(getWeekRange())
   );
-  //   ---States for context---
+  //   ---Weekly Pie Logic---
 
   function tabTracker_LP(tab: number) {
     setActiveTab_LP(tab);
@@ -105,7 +103,7 @@ export default function ClientParent() {
             </svg>
           </a>
         </div>
-        <fetchWeeklyPieContext.Provider value={[week_Pie, setWeek_Pie]}>
+        <fetchWeeklyPieContext.Provider value={{ week_Pie, setWeek_Pie }}>
           {activeTab_LP === 1 && <AddIncomeFormUI mutate={mutate} />}
           {activeTab_LP === 2 && <AddExpenseFormUI mutate={mutate} />}
         </fetchWeeklyPieContext.Provider>
@@ -185,7 +183,11 @@ export default function ClientParent() {
             Search Notes
           </a>
         </div>
-        {activeTab_MP === 1 && <PieChartsUI />}
+        {activeTab_MP === 1 && (
+          <fetchWeeklyPieContext.Provider value={{ week_Pie, setWeek_Pie }}>
+            <PieChartsUI />
+          </fetchWeeklyPieContext.Provider>
+        )}
         {activeTab_MP === 2 && (
           <TransactionHistoryUI
             radioOption={radioOption}

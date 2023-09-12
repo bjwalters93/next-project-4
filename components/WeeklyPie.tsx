@@ -1,7 +1,8 @@
 import { FormEvent } from "react";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
-import { useState } from "react";
+import { useContext } from "react";
+import { fetchWeeklyPieContext } from "./ClientParent";
 
 type Income = {
   type: string;
@@ -22,11 +23,20 @@ type Expense = {
 };
 
 export default function WeeklyPie() {
-  //   const [week, setWeek] = useState<string | null>(
+  //   const [week, setWeek] = useState<string>(
   //     JSON.stringify(getWeekRange())
   //   );
-  const { transactions, isLoading, isError, isValidating, mutate } =
-    useFetchWeeklyPie(week);
+
+  const { week_Pie, setWeek_Pie } = useContext(fetchWeeklyPieContext);
+  const { transactions, isLoading, isError, isValidating } =
+    useFetchWeeklyPie(week_Pie);
+
+  if (isError) {
+    console.log(isError);
+    throw new Error("Unable to fetch data. WeeklyPie rh: api/fetchWeeklyPie");
+  }
+
+  console.log("WeeklyPie_Transactions:", transactions);
 
   const reducedSources: string[] = [];
   const reducedCategories: string[] = [];
@@ -83,7 +93,6 @@ export default function WeeklyPie() {
     let sum: number = 0;
     expenseTransactions.forEach((transaction) => {
       if (category === transaction.category) {
-        console.log(transaction.amount);
         sum += Number(transaction.amount);
       }
     });
@@ -101,7 +110,7 @@ export default function WeeklyPie() {
     const data = {
       week: form.week.value as string,
     };
-    setWeek(data.week);
+    setWeek_Pie(data.week);
   }
 
   const optionsWeek: JSX.Element[] = getPrev52Weeks().map((el, i) => {
@@ -143,29 +152,39 @@ export default function WeeklyPie() {
       down the mutate function. However, you do need the params */}
       {/* also will need to optimized fetching, fetch data in parallel and make use of react suspense */}
       {/* https://dev.to/hey_yogini/usecontext-for-better-state-management-51hi */}
-      <ul>
-        {incomeStats?.map((el: any, i: any) => {
-          return (
-            <ul key={i}>
-              <li>Name: {el.name}</li>
-              <li>Amount: {el.amount}</li>
-              <li>Percentage: {el.percentage}</li>
-            </ul>
-          );
-        })}
-      </ul>
-      <hr />
-      <ul>
-        {expenseStats?.map((el: any, i: any) => {
-          return (
-            <ul key={i}>
-              <li>Name: {el.name}</li>
-              <li>Amount: {el.amount}</li>
-              <li>Percentage: {el.percentage}</li>
-            </ul>
-          );
-        })}
-      </ul>
+      {isLoading ||
+        (isValidating && (
+          <span className="loading loading-bars loading-xs mt-2"></span>
+        ))}
+      {!isLoading && !isValidating && transactions !== undefined && (
+        <div>
+          <ul>
+            {incomeStats.length === 0 && <p>No data to display.</p>}
+            {incomeStats?.map((el: any, i: any) => {
+              return (
+                <ul key={i}>
+                  <li>Name: {el.name}</li>
+                  <li>Amount: {el.amount}</li>
+                  <li>Percentage: {el.percentage}</li>
+                </ul>
+              );
+            })}
+          </ul>
+          <hr />
+          <ul>
+            {expenseStats.length === 0 && <p>No data to display.</p>}
+            {expenseStats?.map((el: any, i: any) => {
+              return (
+                <ul key={i}>
+                  <li>Name: {el.name}</li>
+                  <li>Amount: {el.amount}</li>
+                  <li>Percentage: {el.percentage}</li>
+                </ul>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
