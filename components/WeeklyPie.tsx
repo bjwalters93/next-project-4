@@ -5,6 +5,12 @@ import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
 import { DefaultizedPieValueType } from "@mui/x-charts";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import { createTheme, useTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  blueberryTwilightPalette,
+  mangoFusionPalette,
+  cheerfulFiestaPalette,
+} from "@mui/x-charts/colorPalettes";
 
 type Income = {
   type: string;
@@ -135,14 +141,24 @@ export default function WeeklyPie() {
   };
 
   const sizing = {
-    margin: { right: 0, left: 0 },
-    // width: 200,
+    margin: { right: 200 },
+    // width: 400,
     height: 200,
     // legend: { hidden: true },
   };
+  const newTheme = createTheme({
+    palette: {
+      text: {
+        primary: "hsl(var(--bc))",
+      },
+    },
+  });
   //   ---MUI-X---
   return (
-    <div className="basis-1/3 border border-neutral">
+    <div
+      className=" basis-1/3 border border-neutral"
+      //   style={{ backgroundColor: "hsl(var(--bc))" }}
+    >
       <h3 className="font-semibold text-center">Weekly Pie Chart</h3>
       <form onSubmit={handleSubmitWeek} className="flex items-end">
         <div className="form-control w-full max-w-xs">
@@ -171,29 +187,29 @@ export default function WeeklyPie() {
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div>
-          <PieChart
-            series={[
-              {
-                outerRadius: 80,
-                data,
-                arcLabel: getArcLabel,
-              },
-            ]}
-            sx={{
-              [`& .${pieArcLabelClasses.root}`]: {
-                fill: "white",
-                fontSize: 14,
-              },
-              ["& .css-rbklcn-MuiResponsiveChart-container"]: {
-                backgroundColor: "pink",
-                border: "2px solid green",
-                fontSize: 14,
-              },
-            }}
-            // width={100}
-            // height={200}
-            {...sizing}
-          />
+          <ThemeProvider theme={newTheme}>
+            <PieChart
+              series={[
+                {
+                  // outerRadius: 180,
+                  data,
+                  arcLabel: getArcLabel,
+                  // cx: 100,
+                  // cy: 100,
+                },
+              ]}
+              sx={{
+                [`& .${pieArcLabelClasses.root}`]: {
+                  fill: "white",
+                  fontSize: 14,
+                },
+              }}
+              // width={700}
+              // height={200}
+              {...sizing}
+              colors={mangoFusionPalette}
+            />
+          </ThemeProvider>
           {/* <ul>
             {incomeStats.length === 0 && <p>No data to display.</p>}
             {incomeStats?.map((el: any, i: any) => {
