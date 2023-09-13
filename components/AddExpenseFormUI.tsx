@@ -36,8 +36,6 @@ export default function AddExpenseFormUI({ mutate }: any) {
   };
   return (
     <div className="mt-3 mb-10">
-      {/* <h1 className="font-semibold mb-[10px] text-2xl">Add Expense</h1> */}
-
       <form onSubmit={handleSubmit}>
         <div className="form-control w-full max-w-xs">
           <label className="label">

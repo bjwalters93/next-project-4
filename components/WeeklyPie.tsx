@@ -3,6 +3,8 @@ import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
 import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
+import { DefaultizedPieValueType } from "@mui/x-charts";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 
 type Income = {
   type: string;
@@ -23,10 +25,6 @@ type Expense = {
 };
 
 export default function WeeklyPie() {
-  //   const [week, setWeek] = useState<string>(
-  //     JSON.stringify(getWeekRange())
-  //   );
-
   const { week_Pie, setWeek_Pie } = useContext(fetchWeeklyPieContext);
   const { transactions, isLoading, isError, isValidating } =
     useFetchWeeklyPie(week_Pie);
@@ -121,7 +119,28 @@ export default function WeeklyPie() {
       </option>
     );
   });
+  //   ---MUI-X---
+  const data = incomeStats.map((e) => {
+    return {
+      label: e.name,
+      value: e.amount,
+    };
+  });
 
+  const TOTAL = data.map((item) => item.value).reduce((a, b) => a + b, 0);
+
+  const getArcLabel = (params: DefaultizedPieValueType) => {
+    const percent = params.value / TOTAL;
+    return `${(percent * 100).toFixed(2)}%`;
+  };
+
+  const sizing = {
+    margin: { right: 0, left: 0 },
+    // width: 200,
+    height: 200,
+    // legend: { hidden: true },
+  };
+  //   ---MUI-X---
   return (
     <div className="basis-1/3 border border-neutral">
       <h3 className="font-semibold text-center">Weekly Pie Chart</h3>
@@ -146,19 +165,36 @@ export default function WeeklyPie() {
           Submit
         </button>
       </form>
-      {/* need to add loading ui & is validating ui, and make sure an undefined/empty arr condition is accounted for regarding transactions. */}
-      {/* add mutate function to add income/expense btns, may have to lift state up */}
-      {/* you do not need to call the fetches at the top level, because you can use the mutate config for swr, therefor you won't need to pass
-      down the mutate function. However, you do need the params */}
-      {/* also will need to optimized fetching, fetch data in parallel and make use of react suspense */}
-      {/* https://dev.to/hey_yogini/usecontext-for-better-state-management-51hi */}
       {isLoading ||
         (isValidating && (
           <span className="loading loading-bars loading-xs mt-2"></span>
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div>
-          <ul>
+          <PieChart
+            series={[
+              {
+                outerRadius: 80,
+                data,
+                arcLabel: getArcLabel,
+              },
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fill: "white",
+                fontSize: 14,
+              },
+              ["& .css-rbklcn-MuiResponsiveChart-container"]: {
+                backgroundColor: "pink",
+                border: "2px solid green",
+                fontSize: 14,
+              },
+            }}
+            // width={100}
+            // height={200}
+            {...sizing}
+          />
+          {/* <ul>
             {incomeStats.length === 0 && <p>No data to display.</p>}
             {incomeStats?.map((el: any, i: any) => {
               return (
@@ -182,7 +218,7 @@ export default function WeeklyPie() {
                 </ul>
               );
             })}
-          </ul>
+          </ul> */}
         </div>
       )}
     </div>
