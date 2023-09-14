@@ -15,9 +15,9 @@ export default async function TotalIncomeDisplay() {
     yearlyIncomeData,
   ]);
 
-  const weeklyEarnings = getEarnings(weeklyIncome);
-  const monthlyEarnings = getEarnings(monthlyIncome);
-  const yearlyEarnings = getEarnings(yearlyIncome);
+  const weeklyEarnings = getEarnings(weeklyIncome).toFixed(2);
+  const monthlyEarnings = getEarnings(monthlyIncome).toFixed(2);
+  const yearlyEarnings = getEarnings(yearlyIncome).toFixed(2);
 
   return (
     <div className="basis-1/2 border-r-[.5px] border-neutral">

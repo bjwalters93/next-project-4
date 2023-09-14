@@ -17,7 +17,7 @@ export default function AddIncomeFormUI({ mutate }: any) {
     const form = event.target as HTMLFormElement;
     const data = {
       source: form.source.value,
-      amount: form.amount.value,
+      amount: Number(form.amount.value).toFixed(2),
       date: form.date.value,
       notes: form.notes.value,
     };
@@ -56,6 +56,7 @@ export default function AddIncomeFormUI({ mutate }: any) {
           <input
             className="input input-bordered input-primary input-sm w-full max-w-xs"
             type="number"
+            step=".01"
             id="amount"
             name="amount"
             required

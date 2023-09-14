@@ -14,9 +14,9 @@ export default async function TotalExpenseDisplay() {
     yearlyExpensesData,
   ]);
 
-  const weeklySpending = getExpenses(weeklyExpenses);
-  const monthlySpending = getExpenses(monthlyExpenses);
-  const yearlySpending = getExpenses(yearlyExpenses);
+  const weeklySpending = getExpenses(weeklyExpenses).toFixed(2);
+  const monthlySpending = getExpenses(monthlyExpenses).toFixed(2);
+  const yearlySpending = getExpenses(yearlyExpenses).toFixed(2);
 
   return (
     <div className="basis-1/2 border-l-[.5px] border-l-neutral">

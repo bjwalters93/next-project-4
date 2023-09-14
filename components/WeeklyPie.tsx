@@ -128,7 +128,7 @@ export default function WeeklyPie() {
   //   ---MUI-X---
   const data = incomeStats.map((e) => {
     return {
-      label: e.name,
+      label: e.name + ": $" + e.amount.toFixed(2),
       value: e.amount,
     };
   });
@@ -137,13 +137,13 @@ export default function WeeklyPie() {
 
   const getArcLabel = (params: DefaultizedPieValueType) => {
     const percent = params.value / TOTAL;
-    return `${(percent * 100).toFixed(2)}%`;
+    return `${(percent * 100).toFixed(1)}%`;
   };
 
   const sizing = {
-    margin: { right: 200 },
+    // margin: { right: 200 },
     // width: 400,
-    height: 200,
+    height: 400,
     // legend: { hidden: true },
   };
   const newTheme = createTheme({
@@ -152,7 +152,12 @@ export default function WeeklyPie() {
         primary: "hsl(var(--bc))",
       },
     },
+    typography: {
+      fontSize: 12,
+    },
   });
+  const x = cheerfulFiestaPalette("light");
+  console.log("x:", x);
   //   ---MUI-X---
   return (
     <div
@@ -191,11 +196,13 @@ export default function WeeklyPie() {
             <PieChart
               series={[
                 {
-                  // outerRadius: 180,
+                  //   outerRadius: 200,
                   data,
                   arcLabel: getArcLabel,
                   // cx: 100,
                   // cy: 100,
+                  //   innerRadius: 30,
+                  valueFormatter: getArcLabel,
                 },
               ]}
               sx={{
@@ -203,11 +210,12 @@ export default function WeeklyPie() {
                   fill: "white",
                   fontSize: 14,
                 },
+                "--ChartsLegend-rootOffsetX": "-30px",
               }}
               // width={700}
               // height={200}
               {...sizing}
-              colors={mangoFusionPalette}
+              colors={cheerfulFiestaPalette}
             />
           </ThemeProvider>
           {/* <ul>

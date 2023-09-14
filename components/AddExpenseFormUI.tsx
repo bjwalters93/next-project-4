@@ -56,6 +56,7 @@ export default function AddExpenseFormUI({ mutate }: any) {
           <input
             className="input input-bordered input-primary input-sm w-full max-w-xs"
             type="number"
+            step=".01"
             id="amount"
             name="amount"
             required
