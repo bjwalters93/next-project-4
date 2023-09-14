@@ -3,14 +3,7 @@ import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
 import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
-import { DefaultizedPieValueType } from "@mui/x-charts";
-import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
-import { createTheme, useTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  blueberryTwilightPalette,
-  mangoFusionPalette,
-  cheerfulFiestaPalette,
-} from "@mui/x-charts/colorPalettes";
+import { Pie, PieChart, Legend, Tooltip, Cell } from "recharts";
 
 type Income = {
   type: string;
@@ -125,45 +118,62 @@ export default function WeeklyPie() {
       </option>
     );
   });
-  //   ---MUI-X---
-  const data = incomeStats.map((e) => {
-    return {
-      label: e.name + ": $" + e.amount.toFixed(2),
-      value: e.amount,
-    };
-  });
-
-  const TOTAL = data.map((item) => item.value).reduce((a, b) => a + b, 0);
-
-  const getArcLabel = (params: DefaultizedPieValueType) => {
-    const percent = params.value / TOTAL;
-    return `${(percent * 100).toFixed(1)}%`;
-  };
-
-  const sizing = {
-    // margin: { right: 200 },
-    // width: 400,
-    height: 400,
-    // legend: { hidden: true },
-  };
-  const newTheme = createTheme({
-    palette: {
-      text: {
-        primary: "hsl(var(--bc))",
-      },
+  //   ---PIE---
+  const data01 = [
+    {
+      name: "Group A",
+      value: 400,
     },
-    typography: {
-      fontSize: 12,
+    {
+      name: "Group B",
+      value: 300,
     },
-  });
-  const x = cheerfulFiestaPalette("light");
-  console.log("x:", x);
-  //   ---MUI-X---
+    {
+      name: "Group C",
+      value: 300,
+    },
+    {
+      name: "Group D",
+      value: 200,
+    },
+    {
+      name: "Group E",
+      value: 278,
+    },
+    {
+      name: "Group F",
+      value: 189,
+    },
+  ];
+  const data = [
+    {
+      name: "Group A",
+      value: 2400,
+    },
+    {
+      name: "Group B",
+      value: 4567,
+    },
+    {
+      name: "Group C",
+      value: 1398,
+    },
+    {
+      name: "Group D",
+      value: 9800,
+    },
+    {
+      name: "Group E",
+      value: 3908,
+    },
+    {
+      name: "Group F",
+      value: 4800,
+    },
+  ];
+  //   ---PIE---
   return (
-    <div
-      className=" basis-1/3 border border-neutral"
-      //   style={{ backgroundColor: "hsl(var(--bc))" }}
-    >
+    <div className="w-full border border-neutral">
       <h3 className="font-semibold text-center">Weekly Pie Chart</h3>
       <form onSubmit={handleSubmitWeek} className="flex items-end">
         <div className="form-control w-full max-w-xs">
@@ -191,60 +201,56 @@ export default function WeeklyPie() {
           <span className="loading loading-bars loading-xs mt-2"></span>
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
-        <div>
-          <ThemeProvider theme={newTheme}>
-            <PieChart
-              series={[
-                {
-                  //   outerRadius: 200,
-                  data,
-                  arcLabel: getArcLabel,
-                  // cx: 100,
-                  // cy: 100,
-                  //   innerRadius: 30,
-                  valueFormatter: getArcLabel,
-                },
-              ]}
-              sx={{
-                [`& .${pieArcLabelClasses.root}`]: {
-                  fill: "white",
-                  fontSize: 14,
-                },
-                "--ChartsLegend-rootOffsetX": "-30px",
-              }}
-              // width={700}
-              // height={200}
-              {...sizing}
-              colors={cheerfulFiestaPalette}
-            />
-          </ThemeProvider>
-          {/* <ul>
-            {incomeStats.length === 0 && <p>No data to display.</p>}
-            {incomeStats?.map((el: any, i: any) => {
-              return (
-                <ul key={i}>
-                  <li>Name: {el.name}</li>
-                  <li>Amount: {el.amount}</li>
-                  <li>Percentage: {el.percentage}</li>
-                </ul>
-              );
-            })}
-          </ul>
-          <hr />
-          <ul>
-            {expenseStats.length === 0 && <p>No data to display.</p>}
-            {expenseStats?.map((el: any, i: any) => {
-              return (
-                <ul key={i}>
-                  <li>Name: {el.name}</li>
-                  <li>Amount: {el.amount}</li>
-                  <li>Percentage: {el.percentage}</li>
-                </ul>
-              );
-            })}
-          </ul> */}
+        <div className="mt-3 w-full">
+          <PieChart width={300} height={300}>
+            <Legend verticalAlign="top" height={36} />
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              //   innerRadius={60}
+              outerRadius={80}
+              fill="#82ca9d"
+              label
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} style={{ outline: "none" }} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
         </div>
       )}
     </div>
   );
+}
+
+{
+  /* <ul>
+  {incomeStats.length === 0 && <p>No data to display.</p>}
+  {incomeStats?.map((el: any, i: any) => {
+    return (
+      <ul key={i}>
+        <li>Name: {el.name}</li>
+        <li>Amount: {el.amount}</li>
+        <li>Percentage: {el.percentage}</li>
+      </ul>
+    );
+  })}
+</ul>
+<hr />
+<ul>
+  {expenseStats.length === 0 && <p>No data to display.</p>}
+  {expenseStats?.map((el: any, i: any) => {
+    return (
+      <ul key={i}>
+        <li>Name: {el.name}</li>
+        <li>Amount: {el.amount}</li>
+        <li>Percentage: {el.percentage}</li>
+      </ul>
+    );
+  })}
+</ul> */
 }
