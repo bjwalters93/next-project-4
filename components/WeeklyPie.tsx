@@ -6,7 +6,8 @@ import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
 import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
 import { Pie, PieChart, Tooltip, Cell } from "recharts";
-import { harmony, rotation } from "simpler-color";
+import { complement, harmony, rotation } from "simpler-color";
+import { compileFunction } from "vm";
 // import { useState, useEffect } from "react";
 
 type Income = {
@@ -174,13 +175,15 @@ export default function WeeklyPie() {
   //   }
   function paletteGenerator(hexVal: string) {
     const paletteArr = [];
-    for (let i = 10; i < 360; i + 10) {
-      const nextColor = rotation(hexVal, i);
+    for (let i = 0; i <= 11; i++) {
+      const rotArr = [0, 30, 60, 90, 120, 150, 180, -150, -120, -90, -60, -30];
+      const nextColor = rotation(hexVal, rotArr[i]);
       paletteArr.push(nextColor);
     }
     return paletteArr;
   }
-  const palette = paletteGenerator("#A8E61F");
+  const palette = paletteGenerator("#FF0000");
+  //   const palette = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   console.log("palette:", palette);
 
   function assignColor() {
