@@ -8,10 +8,10 @@ export default function PieChartsUI() {
   return (
     <div className="mt-2">
       <h2 className="font-bold">Charts:</h2>
-      <div className="flex mt-2">
+      <div className="flex flex-col mt-2">
         <WeeklyPie />
-        {/* <MonthlyPie /> */}
-        {/* <YearlyPie /> */}
+        <MonthlyPie />
+        <YearlyPie />
       </div>
     </div>
   );

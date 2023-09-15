@@ -3,7 +3,15 @@ import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
 import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
-import { Pie, PieChart, Legend, Tooltip, Cell } from "recharts";
+import {
+  Pie,
+  PieChart,
+  Legend,
+  Tooltip,
+  Cell,
+  ResponsiveContainer,
+} from "recharts";
+import { isAssertEntry } from "typescript";
 
 type Income = {
   type: string;
@@ -119,61 +127,63 @@ export default function WeeklyPie() {
     );
   });
   //   ---PIE---
-  const data01 = [
-    {
-      name: "Group A",
-      value: 400,
-    },
-    {
-      name: "Group B",
-      value: 300,
-    },
-    {
-      name: "Group C",
-      value: 300,
-    },
-    {
-      name: "Group D",
-      value: 200,
-    },
-    {
-      name: "Group E",
-      value: 278,
-    },
-    {
-      name: "Group F",
-      value: 189,
-    },
-  ];
-  const data = [
-    {
-      name: "Group A",
-      value: 2400,
-    },
-    {
-      name: "Group B",
-      value: 4567,
-    },
-    {
-      name: "Group C",
-      value: 1398,
-    },
-    {
-      name: "Group D",
-      value: 9800,
-    },
-    {
-      name: "Group E",
-      value: 3908,
-    },
-    {
-      name: "Group F",
-      value: 4800,
-    },
-  ];
+  const data = incomeStats.map((el) => {
+    return { name: el.name, value: el.amount };
+  });
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  function assignColor() {
+    let count = 0;
+    return incomeStats.map((el, i) => {
+      console.log("count:", count);
+      //   i < COLORS.length - 1 ? count++ : (count = 0);
+      if (i < COLORS.length - 1) {
+        count++;
+      } else if (i > COLORS.length - 1) {
+        count = 0;
+      }
+      let x = el.percentage;
+      let y = 100 - x;
+      let z = 100 - y;
+      return (
+        <div className="mt-2">
+          <p>{el.name}</p>
+          <p>${el.amount.toFixed(2)}</p>
+          <p>%{el.percentage}</p>
+          <div className="h-[20px] flex border-[3px] border-neutral box-content">
+            <span
+              className={`h-[20px]`}
+              style={{
+                width: `${z}%`,
+                backgroundColor: `${COLORS[count]}`,
+              }}
+            ></span>
+            <span className={`h-[20px]`} style={{ width: `${y}%` }}></span>
+          </div>
+        </div>
+      );
+    });
+  }
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-base-100">
+          <p className="label">{`${
+            payload[0].name
+          } : $${payload[0].value.toFixed(2)}`}</p>
+          <p className="bg-base-100">
+            {((payload[0].value / iSum) * 100).toFixed(2)}%
+          </p>
+        </div>
+      );
+    }
+
+    return null;
+  };
   //   ---PIE---
   return (
-    <div className="w-full border border-neutral">
+    <div className="basis-1/3 border border-neutral">
       <h3 className="font-semibold text-center">Weekly Pie Chart</h3>
       <form onSubmit={handleSubmitWeek} className="flex items-end">
         <div className="form-control w-full max-w-xs">
@@ -201,26 +211,61 @@ export default function WeeklyPie() {
           <span className="loading loading-bars loading-xs mt-2"></span>
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
-        <div className="mt-3 w-full">
-          <PieChart width={300} height={300}>
-            <Legend verticalAlign="top" height={36} />
-            <Pie
-              data={data}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              //   innerRadius={60}
-              outerRadius={80}
-              fill="#82ca9d"
-              label
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} style={{ outline: "none" }} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
+        <div className="mt-3 w-full flex items-center">
+          <div className="basis-1/2 flex flex-col items-center">
+            <div>
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={data}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  //   innerRadius={60}
+                  outerRadius={100}
+                  fill="#82ca9d"
+                  isAnimationActive={false}
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      style={{ outline: "none" }}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+              </PieChart>
+            </div>
+            <div className="w-[80%] max-w-[400px] px-5">{assignColor()}</div>
+          </div>
+          <div className="basis-1/2 flex flex-col items-center">
+            <div>
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={data}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  //   innerRadius={60}
+                  outerRadius={100}
+                  fill="#82ca9d"
+                  isAnimationActive={false}
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      style={{ outline: "none" }}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+              </PieChart>
+            </div>
+            <div></div>
+          </div>
         </div>
       )}
     </div>
