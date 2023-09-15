@@ -1,17 +1,13 @@
+"use client";
+
 import { FormEvent } from "react";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
 import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
-import {
-  Pie,
-  PieChart,
-  Legend,
-  Tooltip,
-  Cell,
-  ResponsiveContainer,
-} from "recharts";
-import { isAssertEntry } from "typescript";
+import { Pie, PieChart, Tooltip, Cell } from "recharts";
+import { harmony, rotation } from "simpler-color";
+// import { useState, useEffect } from "react";
 
 type Income = {
   type: string;
@@ -130,23 +126,76 @@ export default function WeeklyPie() {
   const data = incomeStats.map((el) => {
     return { name: el.name, value: el.amount };
   });
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  //   ---COLOR---
+  //   -----------------------------------------------
+  //   const [charlie, setCharlie] = useState<any>(["0", "0", "0"]);
+  //   useEffect(() => {
+  //     // window is accessible here.
+  //     const daisyHSL = window
+  //       .getComputedStyle(document.documentElement)
+  //       .getPropertyValue("--p")
+  //       .split(" ");
+  //     console.log("window.getComputedStyle", daisyHSL);
+  //     setCharlie(daisyHSL);
+  //   }, []);
+
+  //   -----------------------------------------------
+  //   console.log("daisyHSL:", charlie);
+  //   -----------------------------------------------
+  //   const hVal = Number(charlie[0]);
+  //   const sVal = Number(charlie[1].slice(0, -1));
+  //   const lVal = Number(charlie[2].slice(0, -1));
+  //   -----------------------------------------------
+  //   function hslToHex(h: number, s: number, l: number) {
+  //     l /= 100;
+  //     const a = (s * Math.min(l, 1 - l)) / 100;
+  //     const f = (n: number) => {
+  //       const k = (n + h / 30) % 12;
+  //       const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  //       return Math.round(255 * color)
+  //         .toString(16)
+  //         .padStart(2, "0"); // convert to Hex and prefix "0" if needed
+  //     };
+  //     return `#${f(0)}${f(8)}${f(4)}`;
+  //   }
+  //   -----------------------------------------------
+  //   const daisyHEX = hslToHex(hVal, sVal, lVal);
+  //   const baseColor = harmony(daisyHEX)?.accent;
+  //   -----------------------------------------------
+  //   function paletteGenerator(hexVal: string) {
+  //     let baseColor = hexVal;
+  //     const paletteArr = [];
+  //     for (let i = 0; i < 20; i++) {
+  //       const nextColor = harmony(baseColor);
+  //       baseColor = nextColor.accent;
+  //       paletteArr.push(nextColor.accent);
+  //     }
+  //     return paletteArr;
+  //   }
+  function paletteGenerator(hexVal: string) {
+    const paletteArr = [];
+    for (let i = 10; i < 360; i + 10) {
+      const nextColor = rotation(hexVal, i);
+      paletteArr.push(nextColor);
+    }
+    return paletteArr;
+  }
+  const palette = paletteGenerator("#A8E61F");
+  console.log("palette:", palette);
 
   function assignColor() {
     let count = 0;
     return incomeStats.map((el, i) => {
-      console.log("count:", count);
-      //   i < COLORS.length - 1 ? count++ : (count = 0);
-      if (i < COLORS.length - 1) {
+      if (count < palette.length - 1 && i !== 0) {
         count++;
-      } else if (i > COLORS.length - 1) {
+      } else {
         count = 0;
       }
       let x = el.percentage;
       let y = 100 - x;
       let z = 100 - y;
       return (
-        <div className="mt-2">
+        <div key={i} className="mt-2">
           <p>{el.name}</p>
           <p>${el.amount.toFixed(2)}</p>
           <p>%{el.percentage}</p>
@@ -155,7 +204,7 @@ export default function WeeklyPie() {
               className={`h-[20px]`}
               style={{
                 width: `${z}%`,
-                backgroundColor: `${COLORS[count]}`,
+                backgroundColor: `${palette[count]}`,
               }}
             ></span>
             <span className={`h-[20px]`} style={{ width: `${y}%` }}></span>
@@ -230,7 +279,7 @@ export default function WeeklyPie() {
                     <Cell
                       key={`cell-${index}`}
                       style={{ outline: "none" }}
-                      fill={COLORS[index % COLORS.length]}
+                      fill={palette[index % palette.length]}
                     />
                   ))}
                 </Pie>
@@ -257,7 +306,7 @@ export default function WeeklyPie() {
                     <Cell
                       key={`cell-${index}`}
                       style={{ outline: "none" }}
-                      fill={COLORS[index % COLORS.length]}
+                      fill={palette[index % palette.length]}
                     />
                   ))}
                 </Pie>
