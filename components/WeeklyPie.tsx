@@ -7,8 +7,6 @@ import { useContext } from "react";
 import { fetchWeeklyPieContext } from "./ClientParent";
 import { Pie, PieChart, Tooltip, Cell } from "recharts";
 import { complement, harmony, rotation } from "simpler-color";
-import { compileFunction } from "vm";
-// import { useState, useEffect } from "react";
 
 type Income = {
   type: string;
@@ -128,51 +126,6 @@ export default function WeeklyPie() {
     return { name: el.name, value: el.amount };
   });
   //   ---COLOR---
-  //   -----------------------------------------------
-  //   const [charlie, setCharlie] = useState<any>(["0", "0", "0"]);
-  //   useEffect(() => {
-  //     // window is accessible here.
-  //     const daisyHSL = window
-  //       .getComputedStyle(document.documentElement)
-  //       .getPropertyValue("--p")
-  //       .split(" ");
-  //     console.log("window.getComputedStyle", daisyHSL);
-  //     setCharlie(daisyHSL);
-  //   }, []);
-
-  //   -----------------------------------------------
-  //   console.log("daisyHSL:", charlie);
-  //   -----------------------------------------------
-  //   const hVal = Number(charlie[0]);
-  //   const sVal = Number(charlie[1].slice(0, -1));
-  //   const lVal = Number(charlie[2].slice(0, -1));
-  //   -----------------------------------------------
-  //   function hslToHex(h: number, s: number, l: number) {
-  //     l /= 100;
-  //     const a = (s * Math.min(l, 1 - l)) / 100;
-  //     const f = (n: number) => {
-  //       const k = (n + h / 30) % 12;
-  //       const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-  //       return Math.round(255 * color)
-  //         .toString(16)
-  //         .padStart(2, "0"); // convert to Hex and prefix "0" if needed
-  //     };
-  //     return `#${f(0)}${f(8)}${f(4)}`;
-  //   }
-  //   -----------------------------------------------
-  //   const daisyHEX = hslToHex(hVal, sVal, lVal);
-  //   const baseColor = harmony(daisyHEX)?.accent;
-  //   -----------------------------------------------
-  //   function paletteGenerator(hexVal: string) {
-  //     let baseColor = hexVal;
-  //     const paletteArr = [];
-  //     for (let i = 0; i < 20; i++) {
-  //       const nextColor = harmony(baseColor);
-  //       baseColor = nextColor.accent;
-  //       paletteArr.push(nextColor.accent);
-  //     }
-  //     return paletteArr;
-  //   }
   function paletteGenerator(hexVal: string) {
     const paletteArr = [];
     for (let i = 0; i <= 11; i++) {
@@ -182,9 +135,9 @@ export default function WeeklyPie() {
     }
     return paletteArr;
   }
-  const palette = paletteGenerator("#FF0000");
+  const palette = paletteGenerator("#f10000");
+  //   const palette = paletteGenerator("#f10000").sort(() => Math.random() - 0.5);
   //   const palette = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  console.log("palette:", palette);
 
   function assignColor() {
     let count = 0;
@@ -198,13 +151,21 @@ export default function WeeklyPie() {
       let y = 100 - x;
       let z = 100 - y;
       return (
-        <div key={i} className="mt-2">
-          <p>{el.name}</p>
-          <p>${el.amount.toFixed(2)}</p>
-          <p>%{el.percentage}</p>
-          <div className="h-[20px] flex border-[3px] border-neutral box-content">
+        <div key={i} className="my-3">
+          <p className="flex items-center font-semibold">
             <span
-              className={`h-[20px]`}
+              className="w-[14px] h-[14px] inline-block rounded-full border-[1px] border-neutral mr-1"
+              style={{
+                backgroundColor: `${palette[count]}`,
+              }}
+            ></span>
+            {el.name}
+          </p>
+          <p className="text-sm">${el.amount.toFixed(2)}</p>
+          <p className="text-sm">{el.percentage}%</p>
+          <div className="h-[10px] flex border-[1px] border-neutral box-content mt-2">
+            <span
+              className={`h-[10px]`}
               style={{
                 width: `${z}%`,
                 backgroundColor: `${palette[count]}`,
@@ -230,29 +191,28 @@ export default function WeeklyPie() {
         </div>
       );
     }
-
     return null;
   };
   //   ---PIE---
   return (
-    <div className="basis-1/3 border border-neutral">
-      <h3 className="font-semibold text-center">Weekly Pie Chart</h3>
+    <div className="border border-neutral p-5">
+      <h3 className="font-bold text-center text-xl">Weekly Pie Chart</h3>
       <form onSubmit={handleSubmitWeek} className="flex items-end">
         <div className="form-control w-full max-w-xs">
           <label className="label">
-            <span className="label-text">Choose a week</span>
+            <span className="label-text font-semibold">Choose a week</span>
           </label>
           <select
             id="week"
             name="week"
-            className="select select-secondary select-bordered select-xs"
+            className="select select-primary select-bordered select-xs"
           >
             <option value={JSON.stringify(getWeekRange())}>Current</option>
             {optionsWeek}
           </select>
         </div>
         <button
-          className="btn btn-secondary btn-outline btn-xs ml-2"
+          className="btn btn-primary btn-outline btn-xs ml-2"
           type="submit"
         >
           Submit
@@ -264,32 +224,42 @@ export default function WeeklyPie() {
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div className="mt-3 w-full flex items-center">
-          <div className="basis-1/2 flex flex-col items-center">
-            <div>
-              <PieChart width={300} height={300}>
-                <Pie
-                  data={data}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  //   innerRadius={60}
-                  outerRadius={100}
-                  fill="#82ca9d"
-                  isAnimationActive={false}
-                >
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      style={{ outline: "none" }}
-                      fill={palette[index % palette.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-              </PieChart>
+          <div className="basis-1/2 flex flex-col bg-base-100">
+            <h2 className="font-bold text-center text-lg">Income this Week</h2>
+            <p>
+              <span className="font-bold">Total:</span> ${iSum}
+            </p>
+            <div className="flex">
+              <div>
+                <PieChart width={300} height={300}>
+                  <Pie
+                    data={data}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    //   innerRadius={60}
+                    outerRadius={100}
+                    fill="#82ca9d"
+                    isAnimationActive={false}
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        style={{ outline: "none" }}
+                        fill={palette[index % palette.length]}
+                        stroke="hsl(var(--n))"
+                        strokeWidth={1}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </div>
+              <div className="w-full max-h-[300px] px-5 overflow-y-scroll">
+                {assignColor()}
+              </div>
             </div>
-            <div className="w-[80%] max-w-[400px] px-5">{assignColor()}</div>
           </div>
           <div className="basis-1/2 flex flex-col items-center">
             <div>
@@ -322,32 +292,4 @@ export default function WeeklyPie() {
       )}
     </div>
   );
-}
-
-{
-  /* <ul>
-  {incomeStats.length === 0 && <p>No data to display.</p>}
-  {incomeStats?.map((el: any, i: any) => {
-    return (
-      <ul key={i}>
-        <li>Name: {el.name}</li>
-        <li>Amount: {el.amount}</li>
-        <li>Percentage: {el.percentage}</li>
-      </ul>
-    );
-  })}
-</ul>
-<hr />
-<ul>
-  {expenseStats.length === 0 && <p>No data to display.</p>}
-  {expenseStats?.map((el: any, i: any) => {
-    return (
-      <ul key={i}>
-        <li>Name: {el.name}</li>
-        <li>Amount: {el.amount}</li>
-        <li>Percentage: {el.percentage}</li>
-      </ul>
-    );
-  })}
-</ul> */
 }

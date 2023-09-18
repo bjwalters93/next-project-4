@@ -7,7 +7,7 @@ import YearlyPie from "./YearlyPie";
 export default function PieChartsUI() {
   return (
     <div className="mt-2">
-      <h2 className="font-bold">Charts:</h2>
+      <h2 className="font-bold text-2xl">Charts:</h2>
       <div className="flex flex-col mt-2">
         <WeeklyPie />
         <MonthlyPie />

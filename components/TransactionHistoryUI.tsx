@@ -127,7 +127,7 @@ export default function TransactionHistoryUI({
 
   return (
     <div className="mt-2">
-      <h2 className="font-bold">Transaction History:</h2>
+      <h2 className="font-bold text-2xl mb-2">Transaction History:</h2>
       <form className="flex">
         <div className="flex items-center">
           <label className="label cursor-pointer">
