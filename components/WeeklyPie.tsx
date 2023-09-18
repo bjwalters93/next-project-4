@@ -122,7 +122,11 @@ export default function WeeklyPie() {
     );
   });
   //   ---PIE---
-  const data = incomeStats.map((el) => {
+  const incomeData = incomeStats.map((el) => {
+    return { name: el.name, value: el.amount };
+  });
+
+  const expenseData = expenseStats.map((el) => {
     return { name: el.name, value: el.amount };
   });
   //   ---COLOR---
@@ -139,9 +143,9 @@ export default function WeeklyPie() {
   //   const palette = paletteGenerator("#f10000").sort(() => Math.random() - 0.5);
   //   const palette = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-  function assignColor() {
+  function generateLegend(statsArr: any) {
     let count = 0;
-    return incomeStats.map((el, i) => {
+    return statsArr.map((el: any, i: number) => {
       if (count < palette.length - 1 && i !== 0) {
         count++;
       } else {
@@ -178,7 +182,7 @@ export default function WeeklyPie() {
     });
   }
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const ToolTipIncome = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-base-100">
@@ -193,11 +197,28 @@ export default function WeeklyPie() {
     }
     return null;
   };
+  const ToolTipExpense = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-base-100">
+          <p className="label">{`${
+            payload[0].name
+          } : $${payload[0].value.toFixed(2)}`}</p>
+          <p className="bg-base-100">
+            {((payload[0].value / eSum) * 100).toFixed(2)}%
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
   //   ---PIE---
   return (
-    <div className="border border-neutral p-5">
-      <h3 className="font-bold text-center text-xl">Weekly Pie Chart</h3>
-      <form onSubmit={handleSubmitWeek} className="flex items-end">
+    <div className="border border-neutral pb-5">
+      <h3 className="font-bold text-center text-xl bg-base-200 py-5 border-b-[1px] border-neutral">
+        Weekly Pie Chart
+      </h3>
+      <form onSubmit={handleSubmitWeek} className="flex items-end px-5">
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text font-semibold">Choose a week</span>
@@ -205,16 +226,14 @@ export default function WeeklyPie() {
           <select
             id="week"
             name="week"
-            className="select select-primary select-bordered select-xs"
+            className="select select-neutral select-bordered select-xs"
+            defaultValue={week_Pie}
           >
             <option value={JSON.stringify(getWeekRange())}>Current</option>
             {optionsWeek}
           </select>
         </div>
-        <button
-          className="btn btn-primary btn-outline btn-xs ml-2"
-          type="submit"
-        >
+        <button className="btn btn-primary btn-xs ml-2" type="submit">
           Submit
         </button>
       </form>
@@ -224,69 +243,117 @@ export default function WeeklyPie() {
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div className="mt-3 w-full flex items-center">
-          <div className="basis-1/2 flex flex-col bg-base-100">
-            <h2 className="font-bold text-center text-lg">Income this Week</h2>
-            <p>
-              <span className="font-bold">Total:</span> ${iSum}
+          <div className="basis-1/2 flex flex-col pl-5">
+            <h2 className="font-bold text-center text-lg bg-base-200">
+              Income for Week
+            </h2>
+            <p className="mt-2">
+              <span className="font-bold">Total:</span> ${iSum.toFixed(2)}
             </p>
             <div className="flex">
               <div>
-                <PieChart width={300} height={300}>
-                  <Pie
-                    data={data}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    //   innerRadius={60}
-                    outerRadius={100}
-                    fill="#82ca9d"
-                    isAnimationActive={false}
-                  >
-                    {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        style={{ outline: "none" }}
-                        fill={palette[index % palette.length]}
-                        stroke="hsl(var(--n))"
-                        strokeWidth={1}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomTooltip />} />
-                </PieChart>
+                {incomeData.length === 0 && (
+                  <div className="h-[300px] w-[300px] flex justify-center items-center">
+                    <div className="h-[200px] w-[200px] bg-base-300 rounded-full border-[1px] border-neutral"></div>
+                  </div>
+                )}
+                {incomeData.length > 0 && (
+                  <PieChart width={300} height={300}>
+                    <Pie
+                      data={incomeData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      //   innerRadius={60}
+                      outerRadius={100}
+                      fill="#82ca9d"
+                      isAnimationActive={false}
+                    >
+                      {incomeData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          style={{ outline: "none" }}
+                          fill={palette[index % palette.length]}
+                          stroke="hsl(var(--n))"
+                          strokeWidth={1}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<ToolTipIncome />} />
+                  </PieChart>
+                )}
               </div>
+
               <div className="w-full max-h-[300px] px-5 overflow-y-scroll">
-                {assignColor()}
+                {incomeData.length > 0 ? (
+                  generateLegend(incomeStats)
+                ) : (
+                  <div className="my-3">
+                    <p className="flex items-center font-semibold">
+                      <span className="w-[14px] h-[14px] inline-block rounded-full border-[1px] border-neutral mr-1 bg-base-200"></span>
+                      No income to display.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <div className="basis-1/2 flex flex-col items-center">
-            <div>
-              <PieChart width={300} height={300}>
-                <Pie
-                  data={data}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  //   innerRadius={60}
-                  outerRadius={100}
-                  fill="#82ca9d"
-                  isAnimationActive={false}
-                >
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      style={{ outline: "none" }}
-                      fill={palette[index % palette.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-              </PieChart>
+          <div className="basis-1/2 flex flex-col bg-base-100 pl-5">
+            <h2 className="font-bold text-center text-lg bg-base-200">
+              Expenses for Week
+            </h2>
+            <p className="mt-2">
+              <span className="font-bold">Total:</span> -${eSum.toFixed(2)}
+            </p>
+            <div className="flex">
+              <div>
+                {expenseData.length === 0 && (
+                  <div className="h-[300px] w-[300px] flex justify-center items-center">
+                    <div className="h-[200px] w-[200px] bg-base-300 rounded-full border-[1px] border-neutral"></div>
+                  </div>
+                )}
+                {expenseData.length > 0 && (
+                  <PieChart width={300} height={300}>
+                    <Pie
+                      data={expenseData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      //   innerRadius={60}
+                      outerRadius={100}
+                      fill="#82ca9d"
+                      isAnimationActive={false}
+                    >
+                      {expenseData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          style={{ outline: "none" }}
+                          fill={palette[index % palette.length]}
+                          stroke="hsl(var(--n))"
+                          strokeWidth={1}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<ToolTipExpense />} />
+                  </PieChart>
+                )}
+              </div>
+
+              <div className="w-full max-h-[300px] px-5 overflow-y-scroll">
+                {expenseData.length > 0 ? (
+                  generateLegend(expenseStats)
+                ) : (
+                  <div className="my-3">
+                    <p className="flex items-center font-semibold">
+                      <span className="w-[14px] h-[14px] inline-block rounded-full border-[1px] border-neutral mr-1 bg-base-200"></span>
+                      No expenses to display.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div></div>
           </div>
         </div>
       )}
