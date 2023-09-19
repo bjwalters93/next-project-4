@@ -11,35 +11,30 @@ type Transaction = {
 };
 
 export default async function getYearlyExpenses() {
-  try {
-    const session = await getSessionStatus();
-    if (session === null) {
-      throw new Error("Session is returning null.");
-    }
-    const client = await clientPromise;
-    const db = client.db("user_data");
-    const collection = db.collection("user_transactions");
-    const year = new Date().getFullYear();
-    const transactions = await collection
-      .find<Transaction>({
-        userId: session.user.userId,
-        type: "expense",
-        $expr: { $eq: [{ $year: "$date" }, year] },
-      })
-      .project({
-        type: 1,
-        source: 1,
-        amount: 1,
-        date: 1,
-        notes: 1,
-        transactionCode: 1,
-        _id: 0,
-      })
-      .sort({ date: -1 })
-      .toArray();
-    return transactions;
-  } catch (e) {
-    console.log(e);
-    throw new Error("Error: Failed to fetch getYearlyExpenses()");
+  const session = await getSessionStatus();
+  if (session === null) {
+    throw new Error("Session is returning null.");
   }
+  const client = await clientPromise;
+  const db = client.db("user_data");
+  const collection = db.collection("user_transactions");
+  const year = new Date().getFullYear();
+  const transactions = await collection
+    .find<Transaction>({
+      userId: session.user.userId,
+      type: "expense",
+      $expr: { $eq: [{ $year: "$date" }, year] },
+    })
+    .project({
+      type: 1,
+      source: 1,
+      amount: 1,
+      date: 1,
+      notes: 1,
+      transactionCode: 1,
+      _id: 0,
+    })
+    .sort({ date: -1 })
+    .toArray();
+  return transactions;
 }

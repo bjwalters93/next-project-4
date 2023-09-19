@@ -6,13 +6,15 @@ import TransactionsTable from "./TransactionsTable";
 
 type Props = {
   radioOption: string;
-  week: string | null;
-  month: string | null;
-  year: string | null;
+  week: string;
+  month: string;
+  year_m: string;
+  year_y: string;
   setRadioOption: React.Dispatch<React.SetStateAction<string>>;
-  setWeek: React.Dispatch<React.SetStateAction<string | null>>;
-  setMonth: React.Dispatch<React.SetStateAction<string | null>>;
-  setYear: React.Dispatch<React.SetStateAction<string | null>>;
+  setWeek: React.Dispatch<React.SetStateAction<string>>;
+  setMonth: React.Dispatch<React.SetStateAction<string>>;
+  setYear_m: React.Dispatch<React.SetStateAction<string>>;
+  setYear_y: React.Dispatch<React.SetStateAction<string>>;
   transactions: any;
   isLoading: boolean;
   isError: any;
@@ -22,13 +24,15 @@ type Props = {
 
 export default function TransactionHistoryUI({
   radioOption,
-  //   week,
-  //   month,
-  //   year,
+  week,
+  month,
+  year_m,
+  year_y,
   setRadioOption,
   setWeek,
   setMonth,
-  setYear,
+  setYear_m,
+  setYear_y,
   transactions,
   isLoading,
   isError,
@@ -52,7 +56,7 @@ export default function TransactionHistoryUI({
       year: form.year.value as string,
     };
     setMonth(data.month);
-    setYear(data.year);
+    setYear_m(data.year);
   }
 
   function handleSubmitYear(event: FormEvent) {
@@ -61,25 +65,25 @@ export default function TransactionHistoryUI({
     const data = {
       year: form.year.value as string,
     };
-    setYear(data.year);
+    setYear_y(data.year);
   }
 
   function onOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRadioOption(event.target.value);
-    if (event.target.value === "month") {
-      const month = new Date().getMonth() + 1;
-      setWeek(null);
-      setMonth(month.toString());
-      setYear(new Date().getFullYear().toString());
-    } else if (event.target.value === "year") {
-      setWeek(null);
-      setMonth(null);
-      setYear(new Date().getFullYear().toString());
-    } else if (event.target.value === "week") {
-      setWeek(JSON.stringify(getWeekRange()));
-      setMonth(null);
-      setYear(null);
-    }
+    // if (event.target.value === "month") {
+    //   const month = new Date().getMonth() + 1;
+    //   setWeek(null);
+    //   setMonth(month.toString());
+    //   setYear(new Date().getFullYear().toString());
+    // } else if (event.target.value === "year") {
+    //   setWeek(null);
+    //   setMonth(null);
+    //   setYear(new Date().getFullYear().toString());
+    // } else if (event.target.value === "week") {
+    //   setWeek(JSON.stringify(getWeekRange()));
+    //   setMonth(null);
+    //   setYear(null);
+    // }
   }
 
   const optionsWeek: JSX.Element[] = getPrev52Weeks().map((el, i) => {
@@ -179,6 +183,7 @@ export default function TransactionHistoryUI({
               id="week"
               name="week"
               className="select select-primary select-bordered select-sm"
+              defaultValue={week}
             >
               <option value={JSON.stringify(getWeekRange())}>Current</option>
               {optionsWeek}
@@ -199,6 +204,7 @@ export default function TransactionHistoryUI({
               className="select select-primary select-bordered select-sm"
               id="month"
               name="month"
+              defaultValue={month}
             >
               <option value={new Date().getMonth() + 1}>Current</option>
               {optionsMonth}
@@ -212,6 +218,7 @@ export default function TransactionHistoryUI({
               className="select select-primary select-bordered select-sm"
               id="year"
               name="year"
+              defaultValue={year_m}
             >
               <option value={new Date().getFullYear()}>Current</option>
               {optionsYear}
@@ -232,6 +239,7 @@ export default function TransactionHistoryUI({
               className="select select-primary select-bordered select-sm"
               id="year"
               name="year"
+              defaultValue={year_y}
             >
               <option value={new Date().getFullYear()}>Current</option>
               {optionsYear}

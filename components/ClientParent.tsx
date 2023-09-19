@@ -9,15 +9,19 @@ import { getWeekRange } from "@/utils/getWeekOf";
 import PieChartsUI from "./PieChartsUI";
 import SearchNotesUI from "./SearchNotesUI";
 
-export const fetchWeeklyPieContext = createContext<any>(null);
+export const fetchPieContext = createContext<any>(null);
 
 export default function ClientParent() {
+  const c_month = new Date().getMonth() + 1;
   const [radioOption, setRadioOption] = useState("week");
-  const [week, setWeek] = useState<string | null>(
-    JSON.stringify(getWeekRange())
+  const [week, setWeek] = useState<string>(JSON.stringify(getWeekRange()));
+  const [month, setMonth] = useState<string>(c_month.toString());
+  const [year_m, setYear_m] = useState<string>(
+    new Date().getFullYear().toString()
   );
-  const [month, setMonth] = useState<string | null>(null);
-  const [year, setYear] = useState<string | null>(null);
+  const [year_y, setYear_y] = useState<string>(
+    new Date().getFullYear().toString()
+  );
 
   const [activeTab_LP, setActiveTab_LP] = useState(1);
   const [activeTab_MP, setActiveTab_MP] = useState(1);
@@ -26,7 +30,14 @@ export default function ClientParent() {
   const [week_Pie, setWeek_Pie] = useState<string>(
     JSON.stringify(getWeekRange())
   );
-  //   ---Weekly Pie Logic---
+
+  //   ---Monthly Pie Logic---
+  const [month_Pie, setMonth_Pie] = useState<string>(c_month.toString());
+
+  //   ---Yearly Pie Logic---
+  const [year_Pie, setYear_Pie] = useState<string>(
+    new Date().getFullYear().toString()
+  );
 
   function tabTracker_LP(tab: number) {
     setActiveTab_LP(tab);
@@ -40,7 +51,8 @@ export default function ClientParent() {
     radio: radioOption,
     week: week,
     month: month,
-    year: year,
+    year_m: year_m,
+    year_y: year_y,
   };
 
   const { transactions, isLoading, isError, isValidating, mutate } =
@@ -103,10 +115,19 @@ export default function ClientParent() {
             </svg>
           </a>
         </div>
-        <fetchWeeklyPieContext.Provider value={{ week_Pie, setWeek_Pie }}>
+        <fetchPieContext.Provider
+          value={{
+            week_Pie,
+            setWeek_Pie,
+            month_Pie,
+            setMonth_Pie,
+            year_Pie,
+            setYear_Pie,
+          }}
+        >
           {activeTab_LP === 1 && <AddIncomeFormUI mutate={mutate} />}
           {activeTab_LP === 2 && <AddExpenseFormUI mutate={mutate} />}
-        </fetchWeeklyPieContext.Provider>
+        </fetchPieContext.Provider>
       </div>
       <div className="w-full ml-[355.23px] mt-[139px] p-4">
         <div className="tabs">
@@ -184,20 +205,31 @@ export default function ClientParent() {
           </a>
         </div>
         {activeTab_MP === 1 && (
-          <fetchWeeklyPieContext.Provider value={{ week_Pie, setWeek_Pie }}>
+          <fetchPieContext.Provider
+            value={{
+              week_Pie,
+              setWeek_Pie,
+              month_Pie,
+              setMonth_Pie,
+              year_Pie,
+              setYear_Pie,
+            }}
+          >
             <PieChartsUI />
-          </fetchWeeklyPieContext.Provider>
+          </fetchPieContext.Provider>
         )}
         {activeTab_MP === 2 && (
           <TransactionHistoryUI
             radioOption={radioOption}
             week={week}
             month={month}
-            year={year}
+            year_m={year_m}
+            year_y={year_y}
             setRadioOption={setRadioOption}
             setWeek={setWeek}
             setMonth={setMonth}
-            setYear={setYear}
+            setYear_m={setYear_m}
+            setYear_y={setYear_y}
             transactions={transactions}
             isLoading={isLoading}
             isError={isError}

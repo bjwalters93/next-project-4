@@ -17,27 +17,23 @@ export default async function incomeFormSubmit(formData: FormData) {
     notes: formData.get("notes"),
   };
   console.log("SAData:", data);
-  try {
-    const session = await getSessionStatus();
-    if (session === null) {
-      throw new Error("Route Handler /addIncome: Session is returning null.");
-    }
-    const client = await clientPromise;
-    const db = client.db("user_data");
-    const collection = db.collection("user_transactions");
-    const doc = {
-      userId: session.user.userId,
-      type: "income",
-      source: data.source,
-      amount: data.amount,
-      date: new Date(`${data.date} 00:00:00`),
-      notes: data.notes,
-      transactionCode: uuidv4(),
-    };
-    const result = await collection.insertOne(doc);
-    console.log(`A document was inserted with the _id: ${result.insertedId}`);
-    revalidatePath("/user");
-  } catch (e) {
-    console.log(e);
+  const session = await getSessionStatus();
+  if (session === null) {
+    throw new Error("Route Handler /addIncome: Session is returning null.");
   }
+  const client = await clientPromise;
+  const db = client.db("user_data");
+  const collection = db.collection("user_transactions");
+  const doc = {
+    userId: session.user.userId,
+    type: "income",
+    source: data.source,
+    amount: data.amount,
+    date: new Date(`${data.date} 00:00:00`),
+    notes: data.notes,
+    transactionCode: uuidv4(),
+  };
+  const result = await collection.insertOne(doc);
+  console.log(`A document was inserted with the _id: ${result.insertedId}`);
+  revalidatePath("/user");
 }

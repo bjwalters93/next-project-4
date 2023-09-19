@@ -3,13 +3,13 @@
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import { fetchWeeklyPieContext } from "./ClientParent";
+import { fetchPieContext } from "./ClientParent";
 import { useSWRConfig } from "swr";
 
 export default function AddExpenseFormUI({ mutate }: any) {
   const router = useRouter();
   //   ---context logic---
-  const { week_Pie } = useContext(fetchWeeklyPieContext);
+  const { week_Pie } = useContext(fetchPieContext);
   const { mutate: week_Pie_mutate } = useSWRConfig();
   //   ---context logic---
   const handleSubmit = async (event: FormEvent) => {

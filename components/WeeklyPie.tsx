@@ -4,9 +4,9 @@ import { FormEvent } from "react";
 import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
 import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
 import { useContext } from "react";
-import { fetchWeeklyPieContext } from "./ClientParent";
+import { fetchPieContext } from "./ClientParent";
 import { Pie, PieChart, Tooltip, Cell } from "recharts";
-import { complement, harmony, rotation } from "simpler-color";
+import paletteGenerator from "@/utils/paletteGenerator";
 
 type Income = {
   type: string;
@@ -27,16 +27,14 @@ type Expense = {
 };
 
 export default function WeeklyPie() {
-  const { week_Pie, setWeek_Pie } = useContext(fetchWeeklyPieContext);
+  const { week_Pie, setWeek_Pie } = useContext(fetchPieContext);
   const { transactions, isLoading, isError, isValidating } =
     useFetchWeeklyPie(week_Pie);
 
-  if (isError) {
-    console.log(isError);
-    throw new Error("Unable to fetch data. WeeklyPie rh: api/fetchWeeklyPie");
-  }
-
-  console.log("WeeklyPie_Transactions:", transactions);
+  //   if (isError) {
+  //     console.log(isError);
+  //     throw new Error("Unable to fetch data. WeeklyPie rh: api/fetchWeeklyPie");
+  //   }
 
   const reducedSources: string[] = [];
   const reducedCategories: string[] = [];
@@ -129,19 +127,8 @@ export default function WeeklyPie() {
   const expenseData = expenseStats.map((el) => {
     return { name: el.name, value: el.amount };
   });
-  //   ---COLOR---
-  function paletteGenerator(hexVal: string) {
-    const paletteArr = [];
-    for (let i = 0; i <= 11; i++) {
-      const rotArr = [0, 30, 60, 90, 120, 150, 180, -150, -120, -90, -60, -30];
-      const nextColor = rotation(hexVal, rotArr[i]);
-      paletteArr.push(nextColor);
-    }
-    return paletteArr;
-  }
-  const palette = paletteGenerator("#f10000");
-  //   const palette = paletteGenerator("#f10000").sort(() => Math.random() - 0.5);
-  //   const palette = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  const palette = paletteGenerator();
 
   function generateLegend(statsArr: any) {
     let count = 0;
@@ -243,15 +230,15 @@ export default function WeeklyPie() {
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div className="mt-3 w-full flex items-center">
-          <div className="basis-1/2 flex flex-col pl-5">
-            <h2 className="font-bold text-center text-lg bg-base-200">
+          <div className="basis-1/2 flex flex-col">
+            <h2 className="font-bold text-center text-lg bg-base-200 px-5">
               Income for Week
             </h2>
-            <p className="mt-2">
+            <p className="mt-2 pl-5">
               <span className="font-bold">Total:</span> ${iSum.toFixed(2)}
             </p>
             <div className="flex">
-              <div>
+              <div className="pl-5">
                 {incomeData.length === 0 && (
                   <div className="h-[300px] w-[300px] flex justify-center items-center">
                     <div className="h-[200px] w-[200px] bg-base-300 rounded-full border-[1px] border-neutral"></div>
@@ -292,22 +279,22 @@ export default function WeeklyPie() {
                   <div className="my-3">
                     <p className="flex items-center font-semibold">
                       <span className="w-[14px] h-[14px] inline-block rounded-full border-[1px] border-neutral mr-1 bg-base-200"></span>
-                      No income to display.
+                      No income
                     </p>
                   </div>
                 )}
               </div>
             </div>
           </div>
-          <div className="basis-1/2 flex flex-col bg-base-100 pl-5">
-            <h2 className="font-bold text-center text-lg bg-base-200">
+          <div className="basis-1/2 flex flex-col">
+            <h2 className="font-bold text-center text-lg bg-base-200 px-5">
               Expenses for Week
             </h2>
-            <p className="mt-2">
+            <p className="mt-2 pl-5">
               <span className="font-bold">Total:</span> -${eSum.toFixed(2)}
             </p>
             <div className="flex">
-              <div>
+              <div className="pl-5">
                 {expenseData.length === 0 && (
                   <div className="h-[300px] w-[300px] flex justify-center items-center">
                     <div className="h-[200px] w-[200px] bg-base-300 rounded-full border-[1px] border-neutral"></div>
@@ -348,7 +335,7 @@ export default function WeeklyPie() {
                   <div className="my-3">
                     <p className="flex items-center font-semibold">
                       <span className="w-[14px] h-[14px] inline-block rounded-full border-[1px] border-neutral mr-1 bg-base-200"></span>
-                      No expenses to display.
+                      No expenses
                     </p>
                   </div>
                 )}
