@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request: Request) {
   const res = await request.json();
-  const session = await getSessionStatus();
+  const { session, isError, message } = await getSessionStatus();
   if (session === null) {
     throw new Error("Route Handler /addExpense: Session is returning null.");
   }

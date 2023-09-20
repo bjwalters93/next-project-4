@@ -1,8 +1,7 @@
 "use client";
 
 import { FormEvent } from "react";
-import { getPrev52Weeks, getWeekRange } from "@/utils/getWeekOf";
-import useFetchWeeklyPie from "@/custom_hooks/useFetchWeeklyPie";
+import useFetchYearlyPie from "@/custom_hooks/useFetchYearlyPie";
 import { useContext } from "react";
 import { fetchPieContext } from "./ClientParent";
 import { Pie, PieChart, Tooltip, Cell } from "recharts";
@@ -27,9 +26,9 @@ type Expense = {
 };
 
 export default function YearlyPie() {
-  const { week_Pie, setWeek_Pie } = useContext(fetchPieContext);
+  const { year_Pie, setYear_Pie } = useContext(fetchPieContext);
   const { transactions, isLoading, isError, isValidating } =
-    useFetchWeeklyPie(week_Pie);
+    useFetchYearlyPie(year_Pie);
 
   if (isError) {
     console.log(isError);
@@ -102,23 +101,25 @@ export default function YearlyPie() {
     });
   });
 
-  function handleSubmitWeek(event: FormEvent) {
+  function handleSubmitYear(event: FormEvent) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
     const data = {
-      week: form.week.value as string,
+      year: form.year.value as string,
     };
-    setWeek_Pie(data.week);
+    setYear_Pie(data.year);
   }
 
-  const optionsWeek: JSX.Element[] = getPrev52Weeks().map((el, i) => {
-    const valueString = JSON.stringify(el);
-    return (
-      <option key={i} value={valueString}>
-        {el.range.start} to {el.range.end}
+  const optionsYear: JSX.Element[] = [];
+  const currentYear = new Date().getFullYear();
+  for (let i = 1; i < 101; i++) {
+    let year = currentYear - i;
+    optionsYear.push(
+      <option key={year} value={year}>
+        {year}
       </option>
     );
-  });
+  }
   //   ---PIE---
   const incomeData = incomeStats.map((el) => {
     return { name: el.name, value: el.amount };
@@ -203,21 +204,21 @@ export default function YearlyPie() {
   return (
     <div className="border border-neutral pb-5">
       <h3 className="font-bold text-center text-xl bg-base-200 py-5 border-b-[1px] border-neutral">
-        Weekly Pie Chart
+        Yearly Pie Chart
       </h3>
-      <form onSubmit={handleSubmitWeek} className="flex items-end px-5">
+      <form onSubmit={handleSubmitYear} className="flex items-end px-5">
         <div className="form-control w-full max-w-xs">
           <label className="label">
-            <span className="label-text font-semibold">Choose a week</span>
+            <span className="label-text font-semibold">Choose a year</span>
           </label>
           <select
-            id="week"
-            name="week"
+            id="year"
+            name="year"
             className="select select-neutral select-bordered select-xs"
-            defaultValue={week_Pie}
+            defaultValue={year_Pie}
           >
-            <option value={JSON.stringify(getWeekRange())}>Current</option>
-            {optionsWeek}
+            <option value={new Date().getFullYear()}>Current</option>
+            {optionsYear}
           </select>
         </div>
         <button className="btn btn-primary btn-xs ml-2" type="submit">
@@ -226,13 +227,13 @@ export default function YearlyPie() {
       </form>
       {isLoading ||
         (isValidating && (
-          <span className="loading loading-bars loading-xs mt-2"></span>
+          <span className="loading loading-bars loading-xs mt-2 ml-5"></span>
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div className="mt-3 w-full flex items-center">
           <div className="basis-1/2 flex flex-col">
             <h2 className="font-bold text-center text-lg bg-base-200 px-5">
-              Income for Week
+              Income for Year
             </h2>
             <p className="mt-2 pl-5">
               <span className="font-bold">Total:</span> ${iSum.toFixed(2)}
@@ -288,7 +289,7 @@ export default function YearlyPie() {
           </div>
           <div className="basis-1/2 flex flex-col">
             <h2 className="font-bold text-center text-lg bg-base-200 px-5">
-              Expenses for Week
+              Expenses for Year
             </h2>
             <p className="mt-2 pl-5">
               <span className="font-bold">Total:</span> -${eSum.toFixed(2)}

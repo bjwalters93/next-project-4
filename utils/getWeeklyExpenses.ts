@@ -12,7 +12,7 @@ type Transaction = {
 };
 
 export default async function getWeeklyExpenses() {
-  const session = await getSessionStatus();
+  const { session, isError, message } = await getSessionStatus();
   if (session === null) {
     throw new Error("Session is returning null.");
   }
@@ -40,6 +40,5 @@ export default async function getWeeklyExpenses() {
     })
     .sort({ date: -1 })
     .toArray();
-  throw new Error("testing@");
   return transactions;
 }

@@ -70,20 +70,6 @@ export default function TransactionHistoryUI({
 
   function onOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     setRadioOption(event.target.value);
-    // if (event.target.value === "month") {
-    //   const month = new Date().getMonth() + 1;
-    //   setWeek(null);
-    //   setMonth(month.toString());
-    //   setYear(new Date().getFullYear().toString());
-    // } else if (event.target.value === "year") {
-    //   setWeek(null);
-    //   setMonth(null);
-    //   setYear(new Date().getFullYear().toString());
-    // } else if (event.target.value === "week") {
-    //   setWeek(JSON.stringify(getWeekRange()));
-    //   setMonth(null);
-    //   setYear(null);
-    // }
   }
 
   const optionsWeek: JSX.Element[] = getPrev52Weeks().map((el, i) => {

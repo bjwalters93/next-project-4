@@ -5,9 +5,9 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-export default function useFetchWeeklyPie(week: string | null) {
+export default function useFetchYearlyPie(year: string | null) {
   const { data, error, isLoading, isValidating, mutate } = useSWR(
-    `/api/fetchWeeklyPie?week=${week}`,
+    `/api/fetchYearlyPie?year=${year}`,
     fetcher
   );
   return {

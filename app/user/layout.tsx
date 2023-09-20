@@ -8,15 +8,46 @@ export default async function UserPageLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const sessionData = getSessionStatus();
+  const session = getSessionStatus();
   const themeData = getTheme();
 
-  const [userData, settings] = (await Promise.all([
-    sessionData,
-    themeData,
-  ])) as [Session, { theme: string } | null];
+  const [
+    { session: userData, isError: sessionError, message: sessionMessage },
+    { userTheme: settings, isError: themeError, message: themeMessage },
+  ] = (await Promise.all([session, themeData])) as [
+    {
+      session?: null | Session;
+      isError: boolean;
+      message?: string;
+    },
+    (
+      | {
+          userTheme: {
+            theme: string;
+          } | null;
+          isError: boolean;
+          message: undefined;
+        }
+      | {
+          userTheme: null;
+          isError: boolean;
+          message: any;
+        }
+    )
+  ];
 
-  delete userData.user.userId;
+  if (userData === null || userData === undefined) {
+    throw new Error("Session is expired.");
+  }
+
+  if (sessionError) {
+    throw new Error(sessionMessage);
+  }
+  if (themeError) {
+    throw new Error(themeMessage);
+  }
+
+  delete userData?.user.userId;
 
   return (
     <div

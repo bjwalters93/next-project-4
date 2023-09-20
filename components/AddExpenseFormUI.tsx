@@ -10,7 +10,12 @@ export default function AddExpenseFormUI({ mutate }: any) {
   const router = useRouter();
   //   ---context logic---
   const { week_Pie } = useContext(fetchPieContext);
+  const { month_Pie } = useContext(fetchPieContext);
+  const { month_Pie_y } = useContext(fetchPieContext);
+  const { year_Pie } = useContext(fetchPieContext);
   const { mutate: week_Pie_mutate } = useSWRConfig();
+  const { mutate: month_Pie_mutate } = useSWRConfig();
+  const { mutate: year_Pie_mutate } = useSWRConfig();
   //   ---context logic---
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -31,6 +36,10 @@ export default function AddExpenseFormUI({ mutate }: any) {
     const result = await response.json();
     mutate();
     week_Pie_mutate(`/api/fetchWeeklyPie?week=${week_Pie}`);
+    month_Pie_mutate(
+      `/api/fetchMonthlyPie?month=${month_Pie}&year=${month_Pie_y}`
+    );
+    year_Pie_mutate(`/api/fetchYearlyPie?year=${year_Pie}`);
     router.refresh();
     console.log("post addExpense:", result);
   };

@@ -33,6 +33,9 @@ export default function ClientParent() {
 
   //   ---Monthly Pie Logic---
   const [month_Pie, setMonth_Pie] = useState<string>(c_month.toString());
+  const [month_Pie_y, setMonth_Pie_y] = useState<string>(
+    new Date().getFullYear().toString()
+  );
 
   //   ---Yearly Pie Logic---
   const [year_Pie, setYear_Pie] = useState<string>(
@@ -121,6 +124,8 @@ export default function ClientParent() {
             setWeek_Pie,
             month_Pie,
             setMonth_Pie,
+            month_Pie_y,
+            setMonth_Pie_y,
             year_Pie,
             setYear_Pie,
           }}
@@ -211,6 +216,8 @@ export default function ClientParent() {
               setWeek_Pie,
               month_Pie,
               setMonth_Pie,
+              month_Pie_y,
+              setMonth_Pie_y,
               year_Pie,
               setYear_Pie,
             }}

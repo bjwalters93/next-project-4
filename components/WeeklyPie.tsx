@@ -31,10 +31,10 @@ export default function WeeklyPie() {
   const { transactions, isLoading, isError, isValidating } =
     useFetchWeeklyPie(week_Pie);
 
-  //   if (isError) {
-  //     console.log(isError);
-  //     throw new Error("Unable to fetch data. WeeklyPie rh: api/fetchWeeklyPie");
-  //   }
+  if (isError) {
+    console.log(isError);
+    throw new Error("Unable to fetch data. WeeklyPie rh: api/fetchWeeklyPie");
+  }
 
   const reducedSources: string[] = [];
   const reducedCategories: string[] = [];
@@ -226,7 +226,7 @@ export default function WeeklyPie() {
       </form>
       {isLoading ||
         (isValidating && (
-          <span className="loading loading-bars loading-xs mt-2"></span>
+          <span className="loading loading-bars loading-xs mt-2 ml-5"></span>
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div className="mt-3 w-full flex items-center">

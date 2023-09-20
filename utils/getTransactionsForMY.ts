@@ -14,7 +14,7 @@ export default async function getTransactionsForMY(
   month: string | null,
   year: string | null
 ) {
-  const session = await getSessionStatus();
+  const { session, isError, message } = await getSessionStatus();
   if (session === null) {
     throw new Error("Session is returning null.");
   }

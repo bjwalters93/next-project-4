@@ -17,7 +17,7 @@ export default async function incomeFormSubmit(formData: FormData) {
     notes: formData.get("notes"),
   };
   console.log("SAData:", data);
-  const session = await getSessionStatus();
+  const { session, isError, message } = await getSessionStatus();
   if (session === null) {
     throw new Error("Route Handler /addIncome: Session is returning null.");
   }

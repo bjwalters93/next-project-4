@@ -16,7 +16,7 @@ export default function Error({
 
   return (
     <div className="pt-20">
-      <h1>User</h1>
+      <h1>Main</h1>
       <h2>Something went wrong!</h2>
       <p>{error.message}</p>
       <button

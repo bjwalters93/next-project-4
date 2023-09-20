@@ -5,7 +5,7 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-export default function useCustomFetchSWR(
+export default function useFetchMonthlyPie(
   month: string | null,
   year: string | null
 ) {

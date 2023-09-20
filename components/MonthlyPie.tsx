@@ -26,11 +26,11 @@ type Expense = {
 };
 
 export default function MonthlyPie() {
-  const { month_Pie, setMonth_Pie, year_Pie, setYear_Pie } =
+  const { month_Pie, setMonth_Pie, month_Pie_y, setMonth_Pie_y } =
     useContext(fetchPieContext);
   const { transactions, isLoading, isError, isValidating } = useFetchMonthlyPie(
     month_Pie,
-    year_Pie
+    month_Pie_y
   );
 
   if (isError) {
@@ -112,7 +112,7 @@ export default function MonthlyPie() {
       year: form.year.value as string,
     };
     setMonth_Pie(data.month);
-    setYear_Pie(data.year);
+    setMonth_Pie_y(data.year);
   }
 
   const monthsArr = [
@@ -257,7 +257,7 @@ export default function MonthlyPie() {
             className="select select-neutral select-bordered select-xs"
             id="year"
             name="year"
-            defaultValue={year_Pie}
+            defaultValue={month_Pie_y}
           >
             <option value={new Date().getFullYear()}>Current</option>
             {optionsYear}
@@ -269,7 +269,7 @@ export default function MonthlyPie() {
       </form>
       {isLoading ||
         (isValidating && (
-          <span className="loading loading-bars loading-xs mt-2"></span>
+          <span className="loading loading-bars loading-xs mt-2 ml-5"></span>
         ))}
       {!isLoading && !isValidating && transactions !== undefined && (
         <div className="mt-3 w-full flex items-center">

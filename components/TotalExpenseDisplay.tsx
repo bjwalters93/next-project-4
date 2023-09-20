@@ -43,17 +43,17 @@ export default async function TotalExpenseDisplay() {
       <div className="flex">
         <p className="basis-1/3 text-center">
           <span className="py-1 px-2 bg-base-200 border-[1px] border-neutral">
-            week: ${weeklySpending}
+            week: -${weeklySpending}
           </span>
         </p>
         <p className="basis-1/3 text-center">
           <span className="py-1 px-2 bg-base-200 border-[1px] border-neutral">
-            month: ${monthlySpending}
+            month: -${monthlySpending}
           </span>
         </p>
         <p className="basis-1/3 text-center">
           <span className="py-1 px-2 bg-base-200 border-[1px] border-neutral">
-            year: ${yearlySpending}
+            year: -${yearlySpending}
           </span>
         </p>
       </div>

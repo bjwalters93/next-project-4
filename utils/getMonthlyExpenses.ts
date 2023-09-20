@@ -11,7 +11,7 @@ type Transaction = {
 };
 
 export default async function getMonthlyExpenses() {
-  const session = await getSessionStatus();
+  const { session, isError, message } = await getSessionStatus();
   if (session === null) {
     throw new Error("Session is returning null.");
   }
