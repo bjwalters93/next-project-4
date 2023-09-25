@@ -10,7 +10,7 @@ type Theme = {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const theme = searchParams.get("theme") as string;
-  const session = await getSessionStatus();
+  const { session, isError, message } = await getSessionStatus();
   if (session === null) {
     throw new Error("Session is returning null.");
   }

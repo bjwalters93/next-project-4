@@ -6,6 +6,9 @@ export async function POST(request: Request) {
   try {
     const res = await request.json();
     const { session, isError, message } = await getSessionStatus();
+    if (isError) {
+      throw new Error(message);
+    }
     const client = await clientPromise;
     const coll = client.db("user_data").collection("user_transactions");
     const agg = [
@@ -13,19 +16,20 @@ export async function POST(request: Request) {
         $search: {
           index: "notes",
           compound: {
-            should: [
+            filter: [
               {
                 text: {
-                  // userId: session?.user.userId,
+                  query: `${session?.user.userId}`,
+                  path: "userId",
+                },
+              },
+            ],
+            must: [
+              {
+                text: {
                   query: `${res.search}`,
                   path: "notes",
                   fuzzy: {},
-                },
-              },
-              {
-                equals: {
-                  value: session?.user.userId,
-                  path: "userId",
                 },
               },
             ],
@@ -43,13 +47,19 @@ export async function POST(request: Request) {
         date: 1,
         notes: 1,
         transactionCode: 1,
-        // TURN OFF USER ID WHEN FINISHED, JUST USING TO CHECK IF SEARCH IS WORKING PROPERLY
-        userId: 1,
-        // ------------------------------------------------------------------------------
         _id: 0,
       })
       .toArray();
-    console.log("cursor ->", cursor);
-    return NextResponse.json(cursor);
-  } catch (e) {}
+    return NextResponse.json({
+      results: cursor,
+      isError: false,
+      message: undefined,
+    });
+  } catch (e: any) {
+    return NextResponse.json({
+      results: null,
+      isError: true,
+      message: e.message,
+    });
+  }
 }
